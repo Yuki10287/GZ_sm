@@ -1,0 +1,353 @@
+{
+  "config": {
+    "start_date": "2016-01-01",
+    "window_size": 10,
+    "pricing_lag_days": 1,
+    "threshold_yuan_per_ton": 50.0,
+    "floor_usd_per_bbl": 40.0,
+    "ceiling_usd_per_bbl": 130.0,
+    "ceiling_up_factor": 0.2,
+    "tax_factor": 1.13,
+    "gasoline_bbl_per_ton": 8.6,
+    "diesel_bbl_per_ton": 7.3,
+    "train_end": "2022-12-31"
+  },
+  "summaries": {
+    "fixed_basket": {
+      "oil_index_column": "basket_usd",
+      "pca_weights": {
+        "brent": 0.334406,
+        "wti": 0.333191,
+        "dubai": 0.332403
+      },
+      "calibration_scales": {
+        "gasoline": 0.915057393012566,
+        "diesel": 1.0278864286149216
+      },
+      "metrics": {
+        "all": {
+          "gasoline_formula": {
+            "n": 200,
+            "mae": 84.70942536048297,
+            "rmse": 189.13058602870765,
+            "mean_error": 23.043291023683988,
+            "direction_accuracy": 0.865,
+            "threshold_accuracy": 0.875,
+            "corr": 0.8370000135086294
+          },
+          "diesel_formula": {
+            "n": 200,
+            "mae": 83.15137516868019,
+            "rmse": 164.1515507950985,
+            "mean_error": 17.092270287545713,
+            "direction_accuracy": 0.825,
+            "threshold_accuracy": 0.83,
+            "corr": 0.8291183217165046
+          },
+          "gasoline_calibrated": {
+            "n": 200,
+            "mae": 82.01931336301227,
+            "rmse": 171.70623129217327,
+            "mean_error": 19.3339925414463,
+            "direction_accuracy": 0.865,
+            "threshold_accuracy": 0.84,
+            "corr": 0.8370000135086295
+          },
+          "diesel_calibrated": {
+            "n": 200,
+            "mae": 83.34685740029032,
+            "rmse": 168.27782586341323,
+            "mean_error": 18.12594407436936,
+            "direction_accuracy": 0.825,
+            "threshold_accuracy": 0.83,
+            "corr": 0.8291183217165048
+          }
+        },
+        "test_after_train": {
+          "gasoline_formula": {
+            "n": 67,
+            "mae": 102.34658656952311,
+            "rmse": 273.5483374983693,
+            "mean_error": 39.201312834321314,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.835820895522388,
+            "corr": 0.8784383536221656
+          },
+          "diesel_formula": {
+            "n": 67,
+            "mae": 88.51549295918824,
+            "rmse": 217.5852776661135,
+            "mean_error": 30.840614556172426,
+            "direction_accuracy": 0.8208955223880597,
+            "threshold_accuracy": 0.8208955223880597,
+            "corr": 0.8788456967916501
+          },
+          "gasoline_calibrated": {
+            "n": 67,
+            "mae": 93.36942485651286,
+            "rmse": 238.51557960134608,
+            "mean_error": 34.08385297779512,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.835820895522388,
+            "corr": 0.8784383536221655
+          },
+          "diesel_calibrated": {
+            "n": 67,
+            "mae": 90.6302483500521,
+            "rmse": 226.94480317170536,
+            "mean_error": 32.2667020317811,
+            "direction_accuracy": 0.8208955223880597,
+            "threshold_accuracy": 0.8208955223880597,
+            "corr": 0.8788456967916501
+          }
+        },
+        "zone_summary": [
+          {
+            "zone": "floor",
+            "n": 2,
+            "gasoline_n": 2,
+            "gasoline_mae": 587.5,
+            "gasoline_rmse": 726.5758735328335,
+            "gasoline_mean_error": 587.5,
+            "gasoline_direction_accuracy": 0.0,
+            "gasoline_threshold_accuracy": 0.0,
+            "gasoline_corr": null,
+            "diesel_n": 2,
+            "diesel_mae": 562.5,
+            "diesel_rmse": 697.5403214151853,
+            "diesel_mean_error": 562.5,
+            "diesel_direction_accuracy": 0.0,
+            "diesel_threshold_accuracy": 0.0,
+            "diesel_corr": null
+          },
+          {
+            "zone": "normal",
+            "n": 198,
+            "gasoline_n": 198,
+            "gasoline_mae": 76.91344784142653,
+            "gasoline_rmse": 156.35980542352348,
+            "gasoline_mean_error": 13.594941961056874,
+            "gasoline_direction_accuracy": 0.8737373737373737,
+            "gasoline_threshold_accuracy": 0.8484848484848485,
+            "gasoline_corr": 0.8697215393120654,
+            "diesel_n": 198,
+            "diesel_mae": 78.50692666695991,
+            "diesel_rmse": 153.9113009591781,
+            "diesel_mean_error": 12.627216236736729,
+            "diesel_direction_accuracy": 0.8333333333333334,
+            "diesel_threshold_accuracy": 0.8383838383838383,
+            "diesel_corr": 0.8605478122869884
+          }
+        ]
+      },
+      "nardl_like": {
+        "gasoline": {
+          "n": 198,
+          "r_squared": 0.9149421636260453,
+          "long_run_positive": 70.54818838627287,
+          "long_run_negative": 70.67787034379835,
+          "short_wald_pvalue": 1.0303443784550385e-06,
+          "long_wald_pvalue": 0.8335388071418781,
+          "params": {
+            "const": 917.7641503789562,
+            "price_lag1": -0.14006916204969017,
+            "oil_pos_cum_lag1": 9.881625631388925,
+            "oil_neg_cum_lag1": 9.899790074512481,
+            "d_price_lag1": -0.1865438261080628,
+            "d_oil_pos": 40.52985660200711,
+            "d_oil_neg": 73.85025658405188,
+            "d_oil_pos_lag1": 3.1875004857139504,
+            "d_oil_neg_lag1": 13.12655173556488
+          }
+        },
+        "diesel": {
+          "n": 198,
+          "r_squared": 0.9018631936399959,
+          "long_run_positive": 67.18927708153791,
+          "long_run_negative": 67.19422122531341,
+          "short_wald_pvalue": 2.1812575642860825e-07,
+          "long_wald_pvalue": 0.9932043539613774,
+          "params": {
+            "const": 861.9346312740442,
+            "price_lag1": -0.1543602666927711,
+            "oil_pos_cum_lag1": 10.371354729200684,
+            "oil_neg_cum_lag1": 10.372117908552438,
+            "d_price_lag1": -0.21789520345561592,
+            "d_oil_pos": 39.11973016635873,
+            "d_oil_neg": 71.21300281809158,
+            "d_oil_pos_lag1": 3.661568359746317,
+            "d_oil_neg_lag1": 15.175910674997661
+          }
+        }
+      }
+    },
+    "pca_kalman": {
+      "oil_index_column": "kalman_index_usd",
+      "pca_weights": {
+        "brent": 0.334406,
+        "wti": 0.333191,
+        "dubai": 0.332403
+      },
+      "calibration_scales": {
+        "gasoline": 1.0295618795218182,
+        "diesel": 1.1663453916283522
+      },
+      "metrics": {
+        "all": {
+          "gasoline_formula": {
+            "n": 200,
+            "mae": 81.95435472937645,
+            "rmse": 138.42969018096682,
+            "mean_error": 17.438495988854232,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968268
+          },
+          "diesel_formula": {
+            "n": 200,
+            "mae": 85.00406137756909,
+            "rmse": 133.9195219312474,
+            "mean_error": 12.334711711469286,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453976
+          },
+          "gasoline_calibrated": {
+            "n": 200,
+            "mae": 82.16689795658877,
+            "rmse": 141.2335937332519,
+            "mean_error": 18.56372447145595,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968266
+          },
+          "diesel_calibrated": {
+            "n": 200,
+            "mae": 83.82197541444046,
+            "rmse": 142.83300037824895,
+            "mean_error": 17.709283359512796,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453984
+          }
+        },
+        "test_after_train": {
+          "gasoline_formula": {
+            "n": 67,
+            "mae": 89.93645753851887,
+            "rmse": 160.59745246772403,
+            "mean_error": 27.69385308486329,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119767
+          },
+          "diesel_formula": {
+            "n": 67,
+            "mae": 83.42445105375363,
+            "rmse": 134.62371183302523,
+            "mean_error": 21.072654536283647,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616316
+          },
+          "gasoline_calibrated": {
+            "n": 67,
+            "mae": 92.35247611556332,
+            "rmse": 167.96262652291477,
+            "mean_error": 29.13465856945838,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119769
+          },
+          "diesel_calibrated": {
+            "n": 67,
+            "mae": 92.29974059403708,
+            "rmse": 165.2237459815971,
+            "mean_error": 27.954556681122344,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616313
+          }
+        },
+        "zone_summary": [
+          {
+            "zone": "floor",
+            "n": 2,
+            "gasoline_n": 2,
+            "gasoline_mae": 587.5,
+            "gasoline_rmse": 726.5758735328335,
+            "gasoline_mean_error": 587.5,
+            "gasoline_direction_accuracy": 0.0,
+            "gasoline_threshold_accuracy": 0.0,
+            "gasoline_corr": null,
+            "diesel_n": 2,
+            "diesel_mae": 562.5,
+            "diesel_rmse": 697.5403214151853,
+            "diesel_mean_error": 562.5,
+            "diesel_direction_accuracy": 0.0,
+            "diesel_threshold_accuracy": 0.0,
+            "diesel_corr": null
+          },
+          {
+            "zone": "normal",
+            "n": 198,
+            "gasoline_n": 198,
+            "gasoline_mae": 77.0625231884735,
+            "gasoline_rmse": 121.72083891043408,
+            "gasoline_mean_error": 12.81689340551106,
+            "gasoline_direction_accuracy": 0.8939393939393939,
+            "gasoline_threshold_accuracy": 0.9090909090909091,
+            "gasoline_corr": 0.9019891549317467,
+            "diesel_n": 198,
+            "diesel_mae": 78.98684385297017,
+            "diesel_rmse": 125.26997510852219,
+            "diesel_mean_error": 12.206346827790705,
+            "diesel_direction_accuracy": 0.8636363636363636,
+            "diesel_threshold_accuracy": 0.8787878787878788,
+            "diesel_corr": 0.8872159204547727
+          }
+        ]
+      },
+      "nardl_like": {
+        "gasoline": {
+          "n": 198,
+          "r_squared": 0.918302688312481,
+          "long_run_positive": 89.1991238070026,
+          "long_run_negative": 91.7262902014095,
+          "short_wald_pvalue": 6.997798394163458e-16,
+          "long_wald_pvalue": 0.04737207923526133,
+          "params": {
+            "const": 427.0477514557381,
+            "price_lag1": -0.06150518637608413,
+            "oil_pos_cum_lag1": 5.486208734333098,
+            "oil_neg_cum_lag1": 5.641642574424471,
+            "d_price_lag1": -0.3239466310100813,
+            "d_oil_pos": 50.489677381737714,
+            "d_oil_neg": 83.47241295171611,
+            "d_oil_pos_lag1": 9.626517060141122,
+            "d_oil_neg_lag1": 23.037933391074525
+          }
+        },
+        "diesel": {
+          "n": 198,
+          "r_squared": 0.904873982008972,
+          "long_run_positive": 82.32987092694829,
+          "long_run_negative": 84.31285045096273,
+          "short_wald_pvalue": 7.17063446819667e-15,
+          "long_wald_pvalue": 0.09764706629629562,
+          "params": {
+            "const": 416.3294510085722,
+            "price_lag1": -0.07033956202176307,
+            "oil_pos_cum_lag1": 5.791047062309827,
+            "oil_neg_cum_lag1": 5.930528973527127,
+            "d_price_lag1": -0.34669510016892024,
+            "d_oil_pos": 48.38561902733846,
+            "d_oil_neg": 80.18907605439465,
+            "d_oil_pos_lag1": 10.395759334374404,
+            "d_oil_neg_lag1": 24.189217635700242
+          }
+        }
+      }
+    }
+  }
+}
