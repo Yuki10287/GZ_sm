@@ -1,0 +1,99 @@
+{
+  "config": {
+    "start_date": "2016-01-01",
+    "window_size": 10,
+    "pricing_lag_days": 1,
+    "threshold_yuan_per_ton": 50.0,
+    "floor_usd_per_bbl": 40.0,
+    "ceiling_usd_per_bbl": 130.0,
+    "ceiling_up_factor": 0.2,
+    "tax_factor": 1.13,
+    "gasoline_bbl_per_ton": 8.6,
+    "diesel_bbl_per_ton": 7.3,
+    "train_end": "2022-12-31"
+  },
+  "state_space_fit": {
+    "params": {
+      "mu": 0.08151789338787581,
+      "alpha": 0.023990200190650235,
+      "kappa": 1.1590943044519193,
+      "sigma1": 0.06973141689334607,
+      "sigma2": 0.11264524948859278,
+      "rho_fixed": 0.0,
+      "h_log_brent": 2.3500958697301573,
+      "h_log_wti": 1.951376796424061,
+      "h_log_dubai": 1.8578345053299592,
+      "h_log_brent_m3": 0.36713733772740376,
+      "h_log_brent_m6": 0.06585468494486811,
+      "h_log_wti_m3": 0.4067664776664447,
+      "h_log_wti_m6": -0.09876563035170285,
+      "h_log_dubai_m3": 0.47606483899315,
+      "h_log_dubai_m6": -0.06563787971633402,
+      "obs_sigma_log_brent": 0.027839271742669675,
+      "obs_sigma_log_wti": 0.0735875535268708,
+      "obs_sigma_log_dubai": 0.04323837564362726,
+      "obs_sigma_log_brent_m3": 0.008274670980057288,
+      "obs_sigma_log_brent_m6": 0.0020000000000000005,
+      "obs_sigma_log_wti_m3": 0.06241545568431124,
+      "obs_sigma_log_wti_m6": 0.06842515838188507,
+      "obs_sigma_log_dubai_m3": 0.02411603030010508,
+      "obs_sigma_log_dubai_m6": 0.02727572718299278
+    },
+    "neg_loglike": -50628.237388583475,
+    "success": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 39,
+    "obs_cols": [
+      "log_brent",
+      "log_wti",
+      "log_dubai",
+      "log_brent_m3",
+      "log_brent_m6",
+      "log_wti_m3",
+      "log_wti_m6",
+      "log_dubai_m3",
+      "log_dubai_m6"
+    ]
+  },
+  "futures_data_end": "2026-04-30",
+  "metrics": {
+    "gasoline": {
+      "n": 198,
+      "mae": 156.89213081731504,
+      "rmse": 212.2561152937088,
+      "mean_error": -2.6398190081489235,
+      "direction_accuracy": 0.6262626262626263,
+      "threshold_accuracy": 0.7626262626262627,
+      "corr": 0.592767595921724
+    },
+    "diesel": {
+      "n": 198,
+      "mae": 155.96414580417942,
+      "rmse": 208.85190785199657,
+      "mean_error": -4.4389208329683205,
+      "direction_accuracy": 0.601010101010101,
+      "threshold_accuracy": 0.7323232323232324,
+      "corr": 0.5862614339448047
+    },
+    "test_after_train": {
+      "gasoline": {
+        "n": 66,
+        "mae": 180.66777539354922,
+        "rmse": 247.3180740221665,
+        "mean_error": -14.49347983958965,
+        "direction_accuracy": 0.5454545454545454,
+        "threshold_accuracy": 0.696969696969697,
+        "corr": 0.4900595908971213
+      },
+      "diesel": {
+        "n": 66,
+        "mae": 173.09043079787565,
+        "rmse": 237.8945023271331,
+        "mean_error": -14.193020765881412,
+        "direction_accuracy": 0.5303030303030303,
+        "threshold_accuracy": 0.6818181818181818,
+        "corr": 0.488474994718433
+      }
+    }
+  }
+}
