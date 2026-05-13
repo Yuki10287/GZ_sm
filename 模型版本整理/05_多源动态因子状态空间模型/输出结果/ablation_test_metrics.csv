@@ -1,0 +1,6 @@
+﻿variant,factor_variables,policy_vars_in_ridge,converged,gasoline_test_mae,gasoline_test_wmape,diesel_test_mae,diesel_test_wmape
+A_oil_only,"log_brent_ma10, log_wti_ma10, log_dubai_ma10",False,True,70.99803283537486,0.3194673069153872,69.81717880993743,0.3268868609549831
+B_oil_fx,"log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10",False,True,70.99186445907083,0.3194395512933341,69.80826929535017,0.3268451462465731
+C_cost_factor,"log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons",False,True,71.0681336364736,0.3197827369807744,69.8746117709066,0.32715576440606164
+D_cost_factor_policy_ridge,"log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons",True,True,73.53849184061329,0.3308985193634043,72.78800540369784,0.34079639147783053
+E_full_variable_factor,"log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons, cpi_yoy, ppi_yoy, pmi_manufacturing, gdp_yoy",False,True,71.03538117628678,0.31963536190807346,69.7837325924286,0.3267302644089949

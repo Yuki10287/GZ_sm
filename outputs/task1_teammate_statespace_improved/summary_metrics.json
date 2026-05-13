@@ -1,0 +1,60 @@
+{
+  "config": {
+    "start_date": "2016-01-01",
+    "window_size": 10,
+    "pricing_lag_days": 1,
+    "threshold_yuan_per_ton": 50.0,
+    "floor_usd_per_bbl": 40.0,
+    "ceiling_usd_per_bbl": 130.0,
+    "ceiling_up_factor": 0.2,
+    "tax_factor": 1.13,
+    "gasoline_bbl_per_ton": 8.6,
+    "diesel_bbl_per_ton": 7.3,
+    "train_end": "2022-12-31"
+  },
+  "state_fit": {
+    "source": "C:\\Users\\15591\\PycharmProjects\\GZ_sm\\outputs\\task1_teammate_statespace\\state_space_oil_index.csv",
+    "refit": false,
+    "note": "Loaded the strict two-factor state estimate from the previous run."
+  },
+  "metrics": {
+    "gasoline": {
+      "n": 200,
+      "mae": 81.67444199300255,
+      "rmse": 140.72684902427685,
+      "mean_error": 25.090181678593417,
+      "direction_accuracy": 0.91,
+      "threshold_accuracy": 0.925,
+      "corr": 0.8922601984610807
+    },
+    "diesel": {
+      "n": 200,
+      "mae": 74.29986806219996,
+      "rmse": 126.50496836643882,
+      "mean_error": 18.82974723880605,
+      "direction_accuracy": 0.89,
+      "threshold_accuracy": 0.895,
+      "corr": 0.8825324382193991
+    },
+    "test_after_train": {
+      "gasoline": {
+        "n": 67,
+        "mae": 95.2806916884477,
+        "rmse": 163.457021575848,
+        "mean_error": 38.15829521303372,
+        "direction_accuracy": 0.9253731343283582,
+        "threshold_accuracy": 0.9402985074626866,
+        "corr": 0.9376222948039885
+      },
+      "diesel": {
+        "n": 67,
+        "mae": 79.74071065073282,
+        "rmse": 126.33155371683776,
+        "mean_error": 29.95526238926552,
+        "direction_accuracy": 0.8656716417910447,
+        "threshold_accuracy": 0.8656716417910447,
+        "corr": 0.936052860092503
+      }
+    }
+  }
+}
