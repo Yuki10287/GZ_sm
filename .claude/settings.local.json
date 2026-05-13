@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(conda activate *)",
+      "Bash(python -c \"import pandas as pd; df = pd.read_excel\\('D:/Desktop/26广州数模/GZ_sm/PET_PRI_FUT_S1_D.xls', sheet_name='Data 1', header=2\\); print\\('Shape:', df.shape\\); print\\('Columns:', df.columns.tolist\\(\\)\\); print\\(df.head\\(3\\)\\)\")",
+      "Bash(conda run *)"
+    ]
+  }
+}
