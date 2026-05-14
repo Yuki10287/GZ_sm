@@ -1,21 +1,24 @@
 """
-任务一进阶：多源动态因子状态空间模型
-=============================================
-核心功能：
-    在基础定价机制验证的基础上，引入更多数据源（海关进口数据、CPI/PPI/PMI/GDP），
-    使用动态因子模型（Dynamic Factor Model）提取潜在成本压力因子，
-    再用Ridge回归预测成品油调价幅度。
+任务一：多源动态因子状态空间模型完整实现版
+============================================
 
-建模思路：
-    1. 数据层面：整合油价、汇率、进口成本、宏观指标等多源数据
-    2. 因子层面：用状态空间动态因子模型提取一个潜在"成本压力因子"
-    3. 预测层面：将因子及其他特征输入Ridge回归，预测调价幅度
-    4. 消融实验：对比不同变量组合的预测效果
+本脚本用于完成任务一中“综合调价压力因子”的建模与回测。它不是严格复刻某一篇
+文献的多元状态空间模型，而是结合本题数据条件建立的多源信息融合状态空间模型。
 
-相比基础模型的改进：
-    - 基础模型仅使用油价和汇率
-    - 本模型额外纳入进口成本、CPI/PPI/PMI/GDP等宏观变量
-    - 使用动态因子模型捕捉多变量间的共同趋势
+完整流程：
+    1. 构造调价窗口样本：
+       先复用修正后的国内调价机制，得到每个调价日对应的 10 个工作日窗口。
+    2. 对齐多源数据：
+       油价和汇率使用窗口内日度均值；海关、CPI/PPI/PMI 按“已可获得的最近月度”
+       合并；GDP 按“已结束的最近季度”合并，避免未来信息泄露。
+    3. 状态空间动态因子层：
+       使用 statsmodels 的 DynamicFactor，从 Brent、WTI、Dubai、汇率、进口成本等
+       变量中提取一维潜在因子。该因子解释为“综合成本压力因子”。
+    4. 政策传导层：
+       使用 RidgeCV 回归，把基础机制理论调价值、成本压力因子及可选宏观平滑变量
+       映射到实际汽油/柴油调价幅度。
+    5. 消融实验：
+       逐步加入油价、汇率、进口成本、宏观变量，比较测试期 MAE/WMAPE/方向准确率。
 """
 
 from __future__ import annotations
@@ -41,6 +44,10 @@ import task1_price_mechanism as base  # 引入基础模块
 ROOT = Path(__file__).resolve().parent
 OUTPUT_DIR = ROOT / "outputs" / "task1_multisource_statespace"
 
+# Matplotlib 默认 DejaVu Sans 不含中文。设置常见中文字体候选，避免保存因子图时出现大量缺字警告。
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "Arial Unicode MS", "DejaVu Sans"]
+plt.rcParams["axes.unicode_minus"] = False
+
 
 @dataclass(frozen=True)
 class MultiSourceConfig:
@@ -53,18 +60,34 @@ class MultiSourceConfig:
         window_size: 滑动窗口大小
         pricing_lag_days: 定价滞后天数
         factor_order: 动态因子模型的自回归阶数
+        factor_maxiter: 动态因子极大似然估计最大迭代次数
+        main_variant: 论文主方案名称
     """
     start_date: str = "2016-01-01"
     train_end: str = "2022-12-31"
     window_size: int = 10
     pricing_lag_days: int = 1
     factor_order: int = 1  # 因子的AR(1)自回归阶数
+    factor_maxiter: int = 1000
+    main_variant: str = "D_cost_factor_policy_ridge"
+
+
+@dataclass(frozen=True)
+class VariantSpec:
+    """一个消融实验方案的完整定义。"""
+
+    name: str
+    title: str
+    factor_variables: list[str]
+    include_policy_vars: bool
+    role: str
+    description: str
 
 
 # ==================== 观测变量组合定义 ====================
 # 不同实验方案使用的观测变量集合
 
-OBS_SETS = {
+FACTOR_OBS_SETS = {
     # 方案A：仅油价（基准）
     "A_oil_only": [
         "log_brent_ma10",      # Brent油价10日均值对数
@@ -102,6 +125,9 @@ OBS_SETS = {
     ],
 }
 
+# 保留旧名称，便于之前写过的 notebook 或临时脚本继续引用。
+OBS_SETS = FACTOR_OBS_SETS
+
 # 宏观政策变量（用于Ridge回归，不纳入动态因子）
 POLICY_VARS = [
     "cpi_yoy",                # CPI同比
@@ -111,6 +137,52 @@ POLICY_VARS = [
     "pmi_nonmanufacturing",   # 非制造业PMI
     "gdp_yoy",                # GDP同比
 ]
+
+
+VARIANT_SPECS = [
+    VariantSpec(
+        name="A_oil_only",
+        title="A 仅原油价格因子",
+        factor_variables=FACTOR_OBS_SETS["A_oil_only"],
+        include_policy_vars=False,
+        role="消融基准",
+        description="只用 Brent、WTI、Dubai 的 10 日均价提取动态因子，检验原油价格本身的解释力。",
+    ),
+    VariantSpec(
+        name="B_oil_fx",
+        title="B 原油价格 + 汇率因子",
+        factor_variables=FACTOR_OBS_SETS["B_oil_fx"],
+        include_policy_vars=False,
+        role="成本口径扩展",
+        description="在原油价格基础上加入美元兑人民币汇率，使因子更接近国内进口成本口径。",
+    ),
+    VariantSpec(
+        name="C_cost_factor",
+        title="C 原油价格 + 汇率 + 海关进口成本因子",
+        factor_variables=FACTOR_OBS_SETS["C_cost_factor"],
+        include_policy_vars=False,
+        role="成本压力因子",
+        description="加入进口原油人民币单价和进口量，提取更完整的成本压力因子。",
+    ),
+    VariantSpec(
+        name="D_cost_factor_policy_ridge",
+        title="D 成本压力因子 + 宏观政策平滑变量",
+        factor_variables=FACTOR_OBS_SETS["C_cost_factor"],
+        include_policy_vars=True,
+        role="论文推荐主方案",
+        description="DynamicFactor 只提取成本压力因子，CPI、PPI、PMI、GDP 不进入因子，而在 Ridge 传导层解释政策平滑。",
+    ),
+    VariantSpec(
+        name="E_full_variable_factor",
+        title="E 全变量因子",
+        factor_variables=FACTOR_OBS_SETS["D_full_factor"],
+        include_policy_vars=False,
+        role="对照方案",
+        description="把成本变量和宏观变量全部放入 DynamicFactor，对照检验全变量因子是否优于因子-传导分层建模。",
+    ),
+]
+
+VARIANTS = {spec.name: spec for spec in VARIANT_SPECS}
 
 
 # ==================== 日期工具函数 ====================
@@ -286,6 +358,23 @@ def asof_merge_available(left: pd.DataFrame, right: pd.DataFrame) -> pd.DataFram
     ).drop(columns=["available_date"], errors="ignore")
 
 
+def validate_required_columns(df: pd.DataFrame, required_cols: list[str], stage: str) -> None:
+    """检查建模所需列是否存在，避免模型在后面用晦涩的 KeyError 失败。"""
+
+    missing = [col for col in required_cols if col not in df.columns]
+    if missing:
+        raise ValueError(f"{stage} 缺少必要字段: {', '.join(missing)}")
+
+
+def clean_numeric_frame(df: pd.DataFrame) -> pd.DataFrame:
+    """统一清洗状态空间和回归层使用的数值特征。"""
+
+    out = df.copy()
+    out = out.replace([np.inf, -np.inf], np.nan)
+    out = out.ffill().bfill().fillna(0.0)
+    return out
+
+
 def build_window_dataset(config: MultiSourceConfig) -> pd.DataFrame:
     """
     构建多源窗口数据集
@@ -352,6 +441,19 @@ def build_window_dataset(config: MultiSourceConfig) -> pd.DataFrame:
     features["import_usd_per_ton_change"] = features["import_usd_per_ton"].pct_change()  # 进口单价变化率（美元）
     features["cpi_ppi_gap"] = features["cpi_yoy"] - features["ppi_yoy"]                  # CPI-PPI剪刀差
 
+    validate_required_columns(
+        features,
+        [
+            "adjust_date",
+            "gasoline_actual_delta",
+            "diesel_actual_delta",
+            "gasoline_theory_delta",
+            "diesel_theory_delta",
+            "oil_change_rate",
+        ],
+        "窗口样本构建",
+    )
+
     return features
 
 
@@ -407,9 +509,10 @@ def fit_dynamic_factor(
     返回：
         (添加了因子列的DataFrame, 拟合信息字典, 因子载荷DataFrame)
     """
-    # 提取观测变量并处理异常值
-    obs = features[obs_cols].copy()
-    obs = obs.replace([np.inf, -np.inf], np.nan).ffill().bfill()
+    # 提取观测变量并处理异常值。
+    # DynamicFactor 只接受连续数值矩阵，因此这里统一做无穷值、缺失值清洗。
+    validate_required_columns(features, obs_cols, f"{variant_name} 动态因子观测层")
+    obs = clean_numeric_frame(features[obs_cols])
 
     # 标准化观测变量
     standardized = pd.DataFrame(
@@ -425,7 +528,7 @@ def fit_dynamic_factor(
         factor_order=config.factor_order,  # 因子AR阶数
         error_cov_type="diagonal",         # 误差协方差设为对角阵
     )
-    result = model.fit(method="lbfgs", maxiter=1000, disp=False)  # L-BFGS-B优化
+    result = model.fit(method="lbfgs", maxiter=config.factor_maxiter, disp=False)  # L-BFGS-B优化
 
     # 提取平滑后的因子
     factor = np.asarray(result.factors.smoothed[0], dtype=float)
@@ -500,9 +603,11 @@ def train_predict_product(
     if include_policy_vars:
         feature_cols += POLICY_VARS  # 添加宏观政策变量
 
+    validate_required_columns(result, [target, base_col], f"{product} 传导层")
+
     # 过滤存在的列并处理异常值
     feature_cols = [col for col in feature_cols if col in result.columns]
-    result[feature_cols] = result[feature_cols].replace([np.inf, -np.inf], np.nan).ffill().bfill().fillna(0.0)
+    result[feature_cols] = clean_numeric_frame(result[feature_cols])
 
     # 训练Ridge回归（带交叉验证选择正则化参数）
     train_mask = result["adjust_date"] <= pd.Timestamp(config.train_end)
@@ -512,6 +617,8 @@ def train_predict_product(
             ("ridge", RidgeCV(alphas=np.logspace(-3, 3, 25))),      # Ridge回归，25个候选alpha
         ]
     )
+    if not bool(train_mask.any()):
+        raise ValueError(f"{product} 传导层没有训练样本，请检查 train_end={config.train_end}")
     model.fit(result.loc[train_mask, feature_cols], result.loc[train_mask, target])
 
     # 预测
@@ -553,9 +660,7 @@ def metric_block(df: pd.DataFrame, product: str, pred_col: str) -> dict[str, flo
 def evaluate_variant(
     features: pd.DataFrame,
     config: MultiSourceConfig,
-    variant_name: str,
-    obs_cols: list[str],
-    include_policy_vars: bool,
+    spec: VariantSpec,
 ) -> tuple[pd.DataFrame, dict[str, object], pd.DataFrame]:
     """
     评估单个实验方案
@@ -568,12 +673,14 @@ def evaluate_variant(
     参数：
         features: 特征数据集
         config: 模型配置
-        variant_name: 方案名称
-        obs_cols: 观测变量列表
-        include_policy_vars: 是否包含宏观政策变量
+        spec: 方案定义
     返回：
         (结果DataFrame, 评估摘要, 因子载荷)
     """
+    variant_name = spec.name
+    obs_cols = spec.factor_variables
+    include_policy_vars = spec.include_policy_vars
+
     # 拟合动态因子
     state_df, fit_info, loadings = fit_dynamic_factor(features, config, obs_cols, variant_name)
 
@@ -602,6 +709,9 @@ def evaluate_variant(
         }
 
     summary = {
+        "title": spec.title,
+        "role": spec.role,
+        "description": spec.description,
         "fit": fit_info,
         "include_policy_vars_in_ridge": include_policy_vars,
         "transmission_models": {"gasoline": gas_info, "diesel": diesel_info},
@@ -648,6 +758,96 @@ def plot_factor(df: pd.DataFrame, variant_name: str, output_dir: Path) -> None:
     plt.close(fig)
 
 
+def summarize_best_variant(ablation: pd.DataFrame) -> str:
+    """按汽油和柴油测试期 MAE 均值选择综合最优方案。"""
+
+    score = ablation["gasoline_test_mae"].astype(float) + ablation["diesel_test_mae"].astype(float)
+    return str(ablation.loc[score.idxmin(), "variant"])
+
+
+def write_model_report(
+    output_dir: Path,
+    config: MultiSourceConfig,
+    ablation: pd.DataFrame,
+    summaries: dict[str, dict[str, object]],
+    best_variant: str,
+) -> None:
+    """输出一份面向论文和队友阅读的完整模型说明。"""
+
+    main_variant = config.main_variant
+    main_metrics = summaries[main_variant]["metrics"]["test_after_train"]
+    best_metrics = summaries[best_variant]["metrics"]["test_after_train"]
+    lines = [
+        "多源动态因子状态空间模型说明",
+        "================================",
+        "",
+        "一、模型定位",
+        "",
+        "本模型称为“多源动态因子状态空间模型”或“多源信息融合状态空间模型”。",
+        "它不表述为严格复刻 Pizzinga 文献的多元状态空间模型，也不把潜在因子解释为唯一真实油价。",
+        "本文将该因子解释为综合成本压力因子或综合调价压力因子。",
+        "",
+        "二、数据使用和防泄露处理",
+        "",
+        "- Brent、WTI、Dubai、汇率：使用调价日前计价窗口内的日度均值。",
+        "- 海关进口金额、进口数量、进口单价：按月度数据处理，只使用调价日前已经可获得的最近一期。",
+        "- CPI、PPI、PMI：按月度数据处理，只使用调价日前已经可获得的最近一期。",
+        "- GDP：按季度数据处理，只使用最近已经结束季度的数据。",
+        "- 代码中通过 available_date 和 merge_asof(direction='backward') 实现上述保守对齐。",
+        "",
+        "三、状态空间因子层",
+        "",
+        "使用 DynamicFactor 提取一维潜在因子：",
+        "",
+        "    y_t = Lambda f_t + epsilon_t",
+        "    f_t = A f_{t-1} + eta_t",
+        "",
+        "其中 y_t 是标准化后的多源观测变量，f_t 是潜在成本压力因子。",
+        "因子方向经过符号修正，使其与 Brent 价格方向一致，便于经济解释。",
+        "",
+        "四、政策传导层",
+        "",
+        "状态空间因子并不直接等于国内调价幅度。代码进一步使用 RidgeCV 建立传导层，",
+        "将基础机制理论调价值、油价变化率、成本压力因子及其变化量、进口成本变化率、",
+        "以及可选宏观政策变量映射到汽油/柴油实际调价幅度。",
+        "",
+        "主方案 D_cost_factor_policy_ridge 的含义是：",
+        "",
+        "- DynamicFactor 只放 Brent、WTI、Dubai、汇率、进口原油成本、进口量；",
+        "- CPI、PPI、PMI、GDP 不进入因子；",
+        "- 宏观变量只在 Ridge 传导层作为政策平滑解释变量。",
+        "",
+        "五、消融实验结果",
+        "",
+        ablation.to_string(index=False),
+        "",
+        "六、主方案测试期效果",
+        "",
+        f"主方案：{main_variant}",
+        f"汽油 MAE：{main_metrics['gasoline_multisource']['mae']:.2f} 元/吨",
+        f"汽油 WMAPE：{main_metrics['gasoline_multisource']['wmape']:.4f}",
+        f"柴油 MAE：{main_metrics['diesel_multisource']['mae']:.2f} 元/吨",
+        f"柴油 WMAPE：{main_metrics['diesel_multisource']['wmape']:.4f}",
+        "",
+        "七、综合最优测试 MAE 方案",
+        "",
+        f"综合最优方案：{best_variant}",
+        f"汽油 MAE：{best_metrics['gasoline_multisource']['mae']:.2f} 元/吨",
+        f"柴油 MAE：{best_metrics['diesel_multisource']['mae']:.2f} 元/吨",
+        "",
+        "八、输出文件说明",
+        "",
+        "- validation_*.csv：每个方案的逐期回测结果。",
+        "- loadings_*.csv：每个方案的动态因子载荷矩阵。",
+        "- factor_path_*.png：潜在因子路径图，并标注 2020、2022、2026 异常阶段。",
+        "- ablation_test_metrics.csv：各消融方案测试期指标。",
+        "- summary_metrics.json：完整机器可读结果。",
+        "- model_description.txt：本说明文件。",
+        "",
+    ]
+    (output_dir / "model_description.txt").write_text("\n".join(lines), encoding="utf-8")
+
+
 # ==================== 命令行参数 ====================
 
 def parse_args() -> argparse.Namespace:
@@ -657,6 +857,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--train-end", default=MultiSourceConfig.train_end, help="训练集截止日期")
     parser.add_argument("--window-size", type=int, default=MultiSourceConfig.window_size, help="窗口大小")
     parser.add_argument("--pricing-lag-days", type=int, default=MultiSourceConfig.pricing_lag_days, help="定价滞后天数")
+    parser.add_argument("--factor-order", type=int, default=MultiSourceConfig.factor_order, help="动态因子自回归阶数")
+    parser.add_argument("--factor-maxiter", type=int, default=MultiSourceConfig.factor_maxiter, help="动态因子最大迭代次数")
+    parser.add_argument("--main-variant", default=MultiSourceConfig.main_variant, choices=list(VARIANTS), help="论文主方案")
+    parser.add_argument("--output-dir", default=str(OUTPUT_DIR), help="输出目录")
     return parser.parse_args()
 
 
@@ -686,50 +890,45 @@ def main() -> None:
         train_end=args.train_end,
         window_size=args.window_size,
         pricing_lag_days=args.pricing_lag_days,
+        factor_order=args.factor_order,
+        factor_maxiter=args.factor_maxiter,
+        main_variant=args.main_variant,
     )
+    output_dir = Path(args.output_dir)
 
     # 构建数据集
     features = build_window_dataset(config)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    # 定义实验方案
-    variants = {
-        "A_oil_only": (OBS_SETS["A_oil_only"], False),                          # 仅油价
-        "B_oil_fx": (OBS_SETS["B_oil_fx"], False),                              # 油价+汇率
-        "C_cost_factor": (OBS_SETS["C_cost_factor"], False),                    # 成本因子
-        "D_cost_factor_policy_ridge": (OBS_SETS["C_cost_factor"], True),        # 成本因子+政策变量
-        "E_full_variable_factor": (OBS_SETS["D_full_factor"], False),           # 全变量
-    }
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # 运行所有实验
     summaries = {}
     ablation_rows = []
-    main_validation = None
 
-    for variant_name, (obs_cols, include_policy_vars) in variants.items():
-        state_df, summary, loadings = evaluate_variant(
-            features, config, variant_name, obs_cols, include_policy_vars,
-        )
+    for spec in VARIANT_SPECS:
+        state_df, summary, loadings = evaluate_variant(features, config, spec)
+        variant_name = spec.name
+        obs_cols = spec.factor_variables
         summaries[variant_name] = summary
 
         # 保存结果
-        state_df.to_csv(OUTPUT_DIR / f"validation_{variant_name}.csv", index=False, encoding="utf-8-sig")
-        loadings.to_csv(OUTPUT_DIR / f"loadings_{variant_name}.csv", index=False, encoding="utf-8-sig")
-        plot_factor(state_df, variant_name, OUTPUT_DIR)
+        state_df.to_csv(output_dir / f"validation_{variant_name}.csv", index=False, encoding="utf-8-sig")
+        loadings.to_csv(output_dir / f"loadings_{variant_name}.csv", index=False, encoding="utf-8-sig")
+        plot_factor(state_df, variant_name, output_dir)
 
-        # 保存主方案（D方案）的完整验证结果
-        if variant_name == "D_cost_factor_policy_ridge":
-            main_validation = state_df
-            state_df.to_csv(OUTPUT_DIR / "multisource_state_space_validation.csv", index=False, encoding="utf-8-sig")
-            loadings.to_csv(OUTPUT_DIR / "loadings_cost_factor.csv", index=False, encoding="utf-8-sig")
+        # 保存主方案的完整验证结果，方便论文和队友直接找到
+        if variant_name == config.main_variant:
+            state_df.to_csv(output_dir / "multisource_state_space_validation.csv", index=False, encoding="utf-8-sig")
+            loadings.to_csv(output_dir / "loadings_cost_factor.csv", index=False, encoding="utf-8-sig")
 
         # 收集消融实验结果
         test = summary["metrics"]["test_after_train"]
         ablation_rows.append(
             {
                 "variant": variant_name,
+                "title": spec.title,
+                "role": spec.role,
                 "factor_variables": ", ".join(obs_cols),
-                "policy_vars_in_ridge": include_policy_vars,
+                "policy_vars_in_ridge": spec.include_policy_vars,
                 "converged": summary["fit"]["converged"],
                 "gasoline_test_mae": test["gasoline_multisource"]["mae"],
                 "gasoline_test_wmape": test["gasoline_multisource"]["wmape"],
@@ -740,30 +939,27 @@ def main() -> None:
 
     # 保存消融实验汇总
     ablation = pd.DataFrame(ablation_rows)
-    ablation.to_csv(OUTPUT_DIR / "ablation_test_metrics.csv", index=False, encoding="utf-8-sig")
+    ablation.to_csv(output_dir / "ablation_test_metrics.csv", index=False, encoding="utf-8-sig")
 
     # 保存完整汇总JSON
     summary = {"config": asdict(config), "variants": summaries, "ablation_test_metrics": ablation_rows}
-    with (OUTPUT_DIR / "summary_metrics.json").open("w", encoding="utf-8") as f:
+    with (output_dir / "summary_metrics.json").open("w", encoding="utf-8") as f:
         json.dump(summary, f, ensure_ascii=False, indent=2)
+
+    best_variant = summarize_best_variant(ablation)
+    write_model_report(output_dir, config, ablation, summaries, best_variant)
 
     # 打印结果
     print("多源动态因子状态空间实验结果")
     print(ablation.to_string(index=False))
 
-    # 找出最佳方案（测试集MAE最小）
-    best_idx = (
-        (ablation["gasoline_test_mae"] + ablation["diesel_test_mae"])
-        .astype(float)
-        .idxmin()
-    )
-    best_variant = str(ablation.loc[best_idx, "variant"])
     best = summaries[best_variant]["metrics"]
     print(f"\n最佳测试MAE方案: {best_variant}")
     print("汽油全部样本:", best["all"]["gasoline_multisource"])
     print("柴油全部样本:", best["all"]["diesel_multisource"])
     print("成本因子载荷已保存至 loadings_cost_factor.csv")
-    print(f"\n输出目录: {OUTPUT_DIR}")
+    print(f"模型说明已保存至 model_description.txt")
+    print(f"\n输出目录: {output_dir}")
 
 
 if __name__ == "__main__":

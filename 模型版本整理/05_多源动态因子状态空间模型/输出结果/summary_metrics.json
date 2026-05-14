@@ -4,10 +4,15 @@
     "train_end": "2022-12-31",
     "window_size": 10,
     "pricing_lag_days": 1,
-    "factor_order": 1
+    "factor_order": 1,
+    "factor_maxiter": 1000,
+    "main_variant": "D_cost_factor_policy_ridge"
   },
   "variants": {
     "A_oil_only": {
+      "title": "A 仅原油价格因子",
+      "role": "消融基准",
+      "description": "只用 Brent、WTI、Dubai 的 10 日均价提取动态因子，检验原油价格本身的解释力。",
       "fit": {
         "variant": "A_oil_only",
         "obs_cols": [
@@ -192,6 +197,9 @@
       }
     },
     "B_oil_fx": {
+      "title": "B 原油价格 + 汇率因子",
+      "role": "成本口径扩展",
+      "description": "在原油价格基础上加入美元兑人民币汇率，使因子更接近国内进口成本口径。",
       "fit": {
         "variant": "B_oil_fx",
         "obs_cols": [
@@ -377,6 +385,9 @@
       }
     },
     "C_cost_factor": {
+      "title": "C 原油价格 + 汇率 + 海关进口成本因子",
+      "role": "成本压力因子",
+      "description": "加入进口原油人民币单价和进口量，提取更完整的成本压力因子。",
       "fit": {
         "variant": "C_cost_factor",
         "obs_cols": [
@@ -564,6 +575,9 @@
       }
     },
     "D_cost_factor_policy_ridge": {
+      "title": "D 成本压力因子 + 宏观政策平滑变量",
+      "role": "论文推荐主方案",
+      "description": "DynamicFactor 只提取成本压力因子，CPI、PPI、PMI、GDP 不进入因子，而在 Ridge 传导层解释政策平滑。",
       "fit": {
         "variant": "D_cost_factor_policy_ridge",
         "obs_cols": [
@@ -775,6 +789,9 @@
       }
     },
     "E_full_variable_factor": {
+      "title": "E 全变量因子",
+      "role": "对照方案",
+      "description": "把成本变量和宏观变量全部放入 DynamicFactor，对照检验全变量因子是否优于因子-传导分层建模。",
       "fit": {
         "variant": "E_full_variable_factor",
         "obs_cols": [
@@ -969,6 +986,8 @@
   "ablation_test_metrics": [
     {
       "variant": "A_oil_only",
+      "title": "A 仅原油价格因子",
+      "role": "消融基准",
       "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10",
       "policy_vars_in_ridge": false,
       "converged": true,
@@ -979,6 +998,8 @@
     },
     {
       "variant": "B_oil_fx",
+      "title": "B 原油价格 + 汇率因子",
+      "role": "成本口径扩展",
       "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10",
       "policy_vars_in_ridge": false,
       "converged": true,
@@ -989,6 +1010,8 @@
     },
     {
       "variant": "C_cost_factor",
+      "title": "C 原油价格 + 汇率 + 海关进口成本因子",
+      "role": "成本压力因子",
       "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons",
       "policy_vars_in_ridge": false,
       "converged": true,
@@ -999,6 +1022,8 @@
     },
     {
       "variant": "D_cost_factor_policy_ridge",
+      "title": "D 成本压力因子 + 宏观政策平滑变量",
+      "role": "论文推荐主方案",
       "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons",
       "policy_vars_in_ridge": true,
       "converged": true,
@@ -1009,6 +1034,8 @@
     },
     {
       "variant": "E_full_variable_factor",
+      "title": "E 全变量因子",
+      "role": "对照方案",
       "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons, cpi_yoy, ppi_yoy, pmi_manufacturing, gdp_yoy",
       "policy_vars_in_ridge": false,
       "converged": true,
