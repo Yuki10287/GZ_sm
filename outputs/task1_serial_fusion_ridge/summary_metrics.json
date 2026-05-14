@@ -12,6 +12,11 @@
     "diesel_bbl_per_ton": 7.3,
     "train_end": "2022-12-31"
   },
+  "state_info": {
+    "source": "C:\\Users\\15591\\PycharmProjects\\GZ_sm\\outputs\\task1_teammate_statespace\\state_space_oil_index.csv",
+    "refit": false,
+    "note": "读取已经估计好的双因子状态，以复现实验结果；如需从原始数据重估，可加 --refit。"
+  },
   "selected_mode": "delta_fx_futures",
   "modes": {
     "theory_only": {
