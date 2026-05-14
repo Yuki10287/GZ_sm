@@ -1,0 +1,44 @@
+市场核心变量 + 真实期货期限结构动态因子模型说明
+================================================
+
+一、建模目的
+
+这一版把 CPI、PPI、PMI、GDP 从第一题模型中移除，将其保留给第二题的政策影响评价。
+第一题只使用更贴近短周期调价机制的市场变量：三原油、汇率、真实期货期限结构、海关进口成本。
+
+二、期货数据处理
+
+使用 期货数据/futuredata.xlsx 中 Brent、Dubai、WTI 的 M1、M3、M6 数据。
+不直接使用期货价格水平，而构造 log(M1/M3)、log(M1/M6)、log(M3/M6) 期限价差。
+月度期货数据只从月末后一日开始可用，并用 merge_asof 取调价日前最近一期，避免未来信息泄露。
+
+三、模型结构
+
+DynamicFactor 提取一维市场成本压力因子；RidgeCV 传导层把基础机制调价值、油价变化率、
+因子水平和因子变化量映射到汽油/柴油实际调价幅度。只有加入海关进口成本的方案，
+传导层才使用进口成本变化率。
+
+四、消融实验
+
+                variant                        title     role                                                                                                                                                                                                                                                                      factor_variables  use_import_transmission  converged  gasoline_test_mae  diesel_test_mae  gasoline_2023_2025_mae  diesel_2023_2025_mae
+             A_oil_only                        A 三原油       基准                                                                                                                                                                                                                                          log_brent_ma10, log_wti_ma10, log_dubai_ma10                    False       True          71.218710        69.972446               61.230203             60.281069
+               B_oil_fx                   B 三原油 + 汇率   核心市场因子                                                                                                                                                                                                                        log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10                    False       True          71.215250        69.961834               61.228411             60.274423
+       C_oil_fx_futures          C 三原油 + 汇率 + 期货期限结构   期货检验方案                                          log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, brent_m1_m3_spread, brent_m1_m6_spread, brent_m3_m6_spread, dubai_m1_m3_spread, dubai_m1_m6_spread, dubai_m3_m6_spread, wti_m1_m3_spread, wti_m1_m6_spread, wti_m3_m6_spread                    False       True          77.227404        75.437252               66.274218             64.669616
+        D_oil_fx_import          D 三原油 + 汇率 + 海关进口成本   进口成本对照                                                                                                                                                                               log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons                     True       True          71.068134        69.874612               61.212846             60.188709
+E_oil_fx_futures_import E 三原油 + 汇率 + 期货期限结构 + 海关进口成本 完整市场成本方案 log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons, brent_m1_m3_spread, brent_m1_m6_spread, brent_m3_m6_spread, dubai_m1_m3_spread, dubai_m1_m6_spread, dubai_m3_m6_spread, wti_m1_m3_spread, wti_m1_m6_spread, wti_m3_m6_spread                     True       True          77.250165        77.194262               65.947388             66.080511
+
+五、推荐方案和结果
+
+默认重点检验方案：C_oil_fx_futures
+汽油测试期 MAE：77.23
+柴油测试期 MAE：75.44
+
+综合最优方案：D_oil_fx_import
+汽油测试期 MAE：71.07
+柴油测试期 MAE：69.87
+
+六、论文建议
+
+如果期货期限结构方案没有明显优于三原油+汇率，应如实说明：
+真实期货期限结构提供了市场预期信息，但在当前样本中对短周期调价幅度的数值预测提升有限。
+CPI/PPI/PMI/GDP 更适合放到第二题分析调价机制对宏观经济和价格传导的影响。

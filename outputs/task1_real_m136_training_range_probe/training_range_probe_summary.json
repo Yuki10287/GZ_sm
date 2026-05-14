@@ -1,0 +1,290 @@
+[
+  {
+    "fit_start": "2016-01-01",
+    "fit_end": "2025-12-31",
+    "fit_rows": 2562,
+    "success": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 142,
+    "objective_fit": -73194.260317838,
+    "objective_full": -74356.48414083905,
+    "metrics": {
+      "all": {
+        "gasoline": {
+          "n": 198,
+          "mae": 115.16272652898537,
+          "rmse": 279.79421243177563,
+          "mean_error": 19.702180320141228,
+          "direction_accuracy": 0.7929292929292929,
+          "threshold_accuracy": 0.8232323232323232,
+          "corr": 0.7418905271064856
+        },
+        "diesel": {
+          "n": 198,
+          "mae": 111.70590898512737,
+          "rmse": 238.10112201660084,
+          "mean_error": 14.525799527091923,
+          "direction_accuracy": 0.7575757575757576,
+          "threshold_accuracy": 0.7727272727272727,
+          "corr": 0.7336907283070089
+        },
+        "n": 198
+      },
+      "test_after_2022": {
+        "gasoline": {
+          "n": 66,
+          "mae": 151.40969874901154,
+          "rmse": 453.8318487013767,
+          "mean_error": 43.519674504726815,
+          "direction_accuracy": 0.7878787878787878,
+          "threshold_accuracy": 0.8181818181818182,
+          "corr": 0.7717885231444394
+        },
+        "diesel": {
+          "n": 66,
+          "mae": 135.88407932543552,
+          "rmse": 372.529959585809,
+          "mean_error": 35.05070327057325,
+          "direction_accuracy": 0.7575757575757576,
+          "threshold_accuracy": 0.7878787878787878,
+          "corr": 0.7711532808511531
+        },
+        "n": 66
+      },
+      "test_2023_2025": {
+        "gasoline": {
+          "n": 59,
+          "mae": 76.04618400180605,
+          "rmse": 92.23913753747871,
+          "mean_error": 10.82913041644159,
+          "direction_accuracy": 0.7966101694915254,
+          "threshold_accuracy": 0.8135593220338984,
+          "corr": 0.9139851099604841
+        },
+        "diesel": {
+          "n": 59,
+          "mae": 74.75173862623693,
+          "rmse": 88.6210063753362,
+          "mean_error": 11.319681652269198,
+          "direction_accuracy": 0.7796610169491526,
+          "threshold_accuracy": 0.7966101694915254,
+          "corr": 0.9112500423117311
+        },
+        "n": 59
+      },
+      "exclude_2026": {
+        "gasoline": {
+          "n": 191,
+          "mae": 90.55447430058067,
+          "rmse": 112.30067194187329,
+          "mean_error": 8.731161678775116,
+          "direction_accuracy": 0.7958115183246073,
+          "threshold_accuracy": 0.8219895287958116,
+          "corr": 0.8900212234138732
+        },
+        "diesel": {
+          "n": 191,
+          "mae": 91.93598598180341,
+          "rmse": 115.06943462490696,
+          "mean_error": 6.4430529214149175,
+          "direction_accuracy": 0.7643979057591623,
+          "threshold_accuracy": 0.774869109947644,
+          "corr": 0.8788009039036733
+        },
+        "n": 191
+      }
+    }
+  },
+  {
+    "fit_start": "2016-01-01",
+    "fit_end": "2024-12-31",
+    "fit_rows": 2304,
+    "success": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 121,
+    "objective_fit": -65031.574870927136,
+    "objective_full": -74332.52355617489,
+    "metrics": {
+      "all": {
+        "gasoline": {
+          "n": 198,
+          "mae": 115.03050781121343,
+          "rmse": 279.5132206751894,
+          "mean_error": 19.578098790444912,
+          "direction_accuracy": 0.7929292929292929,
+          "threshold_accuracy": 0.8232323232323232,
+          "corr": 0.7417093581952544
+        },
+        "diesel": {
+          "n": 198,
+          "mae": 111.47981119630752,
+          "rmse": 237.77296568508442,
+          "mean_error": 14.42047450769854,
+          "direction_accuracy": 0.7626262626262627,
+          "threshold_accuracy": 0.7777777777777778,
+          "corr": 0.7337447530936111
+        },
+        "n": 198
+      },
+      "test_after_2022": {
+        "gasoline": {
+          "n": 66,
+          "mae": 151.3323584799498,
+          "rmse": 453.4065407159512,
+          "mean_error": 43.21108901718614,
+          "direction_accuracy": 0.7878787878787878,
+          "threshold_accuracy": 0.8181818181818182,
+          "corr": 0.7716128239335437
+        },
+        "diesel": {
+          "n": 66,
+          "mae": 135.26531990852178,
+          "rmse": 371.9328673696438,
+          "mean_error": 34.788764426498034,
+          "direction_accuracy": 0.7727272727272727,
+          "threshold_accuracy": 0.803030303030303,
+          "corr": 0.7713300761952031
+        },
+        "n": 66
+      },
+      "test_2023_2025": {
+        "gasoline": {
+          "n": 59,
+          "mae": 75.98336140975535,
+          "rmse": 92.16118235795561,
+          "mean_error": 10.802580321745303,
+          "direction_accuracy": 0.7966101694915254,
+          "threshold_accuracy": 0.8135593220338984,
+          "corr": 0.9141120252184846
+        },
+        "diesel": {
+          "n": 59,
+          "mae": 74.07167501382227,
+          "rmse": 87.3256977891153,
+          "mean_error": 11.297144943980491,
+          "direction_accuracy": 0.7966101694915254,
+          "threshold_accuracy": 0.8135593220338984,
+          "corr": 0.9141932083855204
+        },
+        "n": 59
+      },
+      "exclude_2026": {
+        "gasoline": {
+          "n": 191,
+          "mae": 90.42472884879132,
+          "rmse": 112.14906257210093,
+          "mean_error": 8.700962954747537,
+          "direction_accuracy": 0.7958115183246073,
+          "threshold_accuracy": 0.8219895287958116,
+          "corr": 0.8902557280962726
+        },
+        "diesel": {
+          "n": 191,
+          "mae": 91.70534203519354,
+          "rmse": 114.72703162698909,
+          "mean_error": 6.4174191207868585,
+          "direction_accuracy": 0.7696335078534031,
+          "threshold_accuracy": 0.7801047120418848,
+          "corr": 0.8797888928947922
+        },
+        "n": 191
+      }
+    }
+  },
+  {
+    "fit_start": "2017-01-01",
+    "fit_end": "2025-12-31",
+    "fit_rows": 2324,
+    "success": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 80,
+    "objective_fit": -68400.68049108732,
+    "objective_full": -73584.49818907715,
+    "metrics": {
+      "all": {
+        "gasoline": {
+          "n": 198,
+          "mae": 114.730500786707,
+          "rmse": 278.6235331597903,
+          "mean_error": 19.694896921748374,
+          "direction_accuracy": 0.7929292929292929,
+          "threshold_accuracy": 0.8232323232323232,
+          "corr": 0.743338854713063
+        },
+        "diesel": {
+          "n": 198,
+          "mae": 110.63493005604066,
+          "rmse": 236.6552951298884,
+          "mean_error": 14.519617107525894,
+          "direction_accuracy": 0.7676767676767676,
+          "threshold_accuracy": 0.7828282828282829,
+          "corr": 0.7358382482061585
+        },
+        "n": 198
+      },
+      "test_after_2022": {
+        "gasoline": {
+          "n": 66,
+          "mae": 150.7754948803313,
+          "rmse": 451.8881931127888,
+          "mean_error": 43.437145910949944,
+          "direction_accuracy": 0.7878787878787878,
+          "threshold_accuracy": 0.8181818181818182,
+          "corr": 0.7728564145957545
+        },
+        "diesel": {
+          "n": 66,
+          "mae": 133.29612160756807,
+          "rmse": 369.9885118176977,
+          "mean_error": 34.98064992934404,
+          "direction_accuracy": 0.7878787878787878,
+          "threshold_accuracy": 0.8181818181818182,
+          "corr": 0.7732614338618427
+        },
+        "n": 66
+      },
+      "test_2023_2025": {
+        "gasoline": {
+          "n": 59,
+          "mae": 75.76220900086487,
+          "rmse": 91.98439978533499,
+          "mean_error": 10.817411578231017,
+          "direction_accuracy": 0.7966101694915254,
+          "threshold_accuracy": 0.8135593220338984,
+          "corr": 0.9145371231700343
+        },
+        "diesel": {
+          "n": 59,
+          "mae": 73.86978440635498,
+          "rmse": 87.11695102097,
+          "mean_error": 11.309734266346274,
+          "direction_accuracy": 0.7966101694915254,
+          "threshold_accuracy": 0.8135593220338984,
+          "corr": 0.9146146285483715
+        },
+        "n": 59
+      },
+      "exclude_2026": {
+        "gasoline": {
+          "n": 191,
+          "mae": 90.23783677862379,
+          "rmse": 111.92661159369095,
+          "mean_error": 8.748509128267603,
+          "direction_accuracy": 0.7958115183246073,
+          "threshold_accuracy": 0.8219895287958116,
+          "corr": 0.8908100356562785
+        },
+        "diesel": {
+          "n": 191,
+          "mae": 91.4475885077042,
+          "rmse": 114.45449461429872,
+          "mean_error": 6.457778082030633,
+          "direction_accuracy": 0.7696335078534031,
+          "threshold_accuracy": 0.7801047120418848,
+          "corr": 0.880316230848684
+        },
+        "n": 191
+      }
+    }
+  }
+]

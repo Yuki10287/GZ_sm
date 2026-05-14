@@ -1,0 +1,1274 @@
+{
+  "config": {
+    "start_date": "2016-01-01",
+    "train_end": "2022-12-31",
+    "window_size": 10,
+    "pricing_lag_days": 1,
+    "factor_order": 1,
+    "factor_maxiter": 1000,
+    "main_variant": "C_oil_fx_futures"
+  },
+  "futures_path": "C:\\Users\\15591\\PycharmProjects\\GZ_sm\\期货数据\\futuredata.xlsx",
+  "variants": {
+    "A_oil_only": {
+      "title": "A 三原油",
+      "role": "基准",
+      "description": "只使用 Brent、WTI、Dubai 的调价窗口均值提取市场因子。",
+      "factor_variables": [
+        "log_brent_ma10",
+        "log_wti_ma10",
+        "log_dubai_ma10"
+      ],
+      "use_import_transmission": false,
+      "fit": {
+        "variant": "A_oil_only",
+        "obs_cols": [
+          "log_brent_ma10",
+          "log_wti_ma10",
+          "log_dubai_ma10"
+        ],
+        "llf": 179.6370432077493,
+        "aic": -345.2740864154986,
+        "bic": -322.1858648496623,
+        "converged": true,
+        "iterations": 74
+      },
+      "transmission_models": {
+        "gasoline": {
+          "alpha": 10.0,
+          "features": [
+            "gasoline_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff"
+          ],
+          "coef": {
+            "gasoline_theory_delta": 78.62835064045359,
+            "oil_change_rate": 64.27116666948143,
+            "factor_1": 13.911449139071616,
+            "factor_1_diff": 98.28664344034921
+          }
+        },
+        "diesel": {
+          "alpha": 5.623413251903491,
+          "features": [
+            "diesel_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff"
+          ],
+          "coef": {
+            "diesel_theory_delta": 76.94659360159272,
+            "oil_change_rate": 55.720195614895744,
+            "factor_1": 13.573840322712002,
+            "factor_1_diff": 103.17623542959457
+          }
+        }
+      },
+      "metrics": {
+        "all": {
+          "gasoline_mechanism": {
+            "n": 200,
+            "mae": 81.95435472937645,
+            "rmse": 138.42969018096682,
+            "mean_error": 17.438495988854232,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968268,
+            "wmape": 0.38381620292413743
+          },
+          "diesel_mechanism": {
+            "n": 200,
+            "mae": 85.00406137756909,
+            "rmse": 133.9195219312474,
+            "mean_error": 12.334711711469286,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453976,
+            "wmape": 0.4083298252795441
+          },
+          "gasoline_market_factor": {
+            "n": 200,
+            "mae": 65.96639078467817,
+            "rmse": 89.51123438954727,
+            "mean_error": 5.598250333236666,
+            "direction_accuracy": 0.97,
+            "threshold_accuracy": 0.9,
+            "corr": 0.94102669223126,
+            "wmape": 0.30893989361750696
+          },
+          "diesel_market_factor": {
+            "n": 200,
+            "mae": 66.5122008476441,
+            "rmse": 94.19151654445554,
+            "mean_error": 5.543916361489562,
+            "direction_accuracy": 0.965,
+            "threshold_accuracy": 0.875,
+            "corr": 0.931021375277801,
+            "wmape": 0.31950138512138393
+          }
+        },
+        "test_after_train": {
+          "gasoline_mechanism": {
+            "n": 67,
+            "mae": 89.93645753851887,
+            "rmse": 160.59745246772403,
+            "mean_error": 27.69385308486329,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119767,
+            "wmape": 0.40468385863537704
+          },
+          "diesel_mechanism": {
+            "n": 67,
+            "mae": 83.42445105375363,
+            "rmse": 134.62371183302523,
+            "mean_error": 21.072654536283647,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616316,
+            "wmape": 0.39059666111820357
+          },
+          "gasoline_market_factor": {
+            "n": 67,
+            "mae": 71.21870990650666,
+            "rmse": 102.70265688720595,
+            "mean_error": 16.71119502458705,
+            "direction_accuracy": 0.9701492537313433,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9390066514716623,
+            "wmape": 0.32046027963303875
+          },
+          "diesel_market_factor": {
+            "n": 67,
+            "mae": 69.97244583000032,
+            "rmse": 100.8870274828794,
+            "mean_error": 16.549004064147937,
+            "direction_accuracy": 0.9552238805970149,
+            "threshold_accuracy": 0.8059701492537313,
+            "corr": 0.937490477379477,
+            "wmape": 0.3276138274360602
+          }
+        },
+        "test_2023_2025": {
+          "gasoline_mechanism": {
+            "n": 59,
+            "mae": 70.58725402163425,
+            "rmse": 90.99949350325345,
+            "mean_error": 6.30873549706105,
+            "direction_accuracy": 0.864406779661017,
+            "threshold_accuracy": 0.864406779661017,
+            "corr": 0.9122390581559432,
+            "wmape": 0.36937010973626794
+          },
+          "diesel_mechanism": {
+            "n": 59,
+            "mae": 70.84090977966329,
+            "rmse": 96.2501618637979,
+            "mean_error": 7.482602243957808,
+            "direction_accuracy": 0.8135593220338984,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.8963832047761441,
+            "wmape": 0.38575114693125373
+          },
+          "gasoline_market_factor": {
+            "n": 59,
+            "mae": 61.23020296831407,
+            "rmse": 81.13594710349435,
+            "mean_error": 5.428447392598756,
+            "direction_accuracy": 0.9661016949152542,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.9342336699830776,
+            "wmape": 0.32040638360359464
+          },
+          "diesel_market_factor": {
+            "n": 59,
+            "mae": 60.281069087667404,
+            "rmse": 79.65942222564303,
+            "mean_error": 5.262645329819902,
+            "direction_accuracy": 0.9491525423728814,
+            "threshold_accuracy": 0.7796610169491526,
+            "corr": 0.9297043930042492,
+            "wmape": 0.32824947634262824
+          }
+        },
+        "exclude_2026": {
+          "gasoline_mechanism": {
+            "n": 192,
+            "mae": 75.67591811495284,
+            "rmse": 116.21406454997914,
+            "mean_error": 10.43972101776879,
+            "direction_accuracy": 0.8802083333333334,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.8805897960379924,
+            "wmape": 0.3717005954993846
+          },
+          "diesel_mechanism": {
+            "n": 192,
+            "mae": 81.20306110371071,
+            "rmse": 123.30500300221851,
+            "mean_error": 7.7945209414393934,
+            "direction_accuracy": 0.8489583333333334,
+            "threshold_accuracy": 0.8645833333333334,
+            "corr": 0.8639306131158047,
+            "wmape": 0.4085688608991734
+          },
+          "gasoline_market_factor": {
+            "n": 192,
+            "mae": 62.67815921005322,
+            "rmse": 81.78180749699382,
+            "mean_error": 1.6681166466839985,
+            "direction_accuracy": 0.96875,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.9430190861690579,
+            "wmape": 0.30785895544462055
+          },
+          "diesel_market_factor": {
+            "n": 192,
+            "mae": 63.38994466193321,
+            "rmse": 87.4065352646628,
+            "mean_error": 1.617167054475911,
+            "direction_accuracy": 0.9635416666666666,
+            "threshold_accuracy": 0.8697916666666666,
+            "corr": 0.9306657556013365,
+            "wmape": 0.31894311779589035
+          }
+        }
+      }
+    },
+    "B_oil_fx": {
+      "title": "B 三原油 + 汇率",
+      "role": "核心市场因子",
+      "description": "加入美元兑人民币汇率，刻画国内进口成本口径。",
+      "factor_variables": [
+        "log_brent_ma10",
+        "log_wti_ma10",
+        "log_dubai_ma10",
+        "log_usd_cny_ma10"
+      ],
+      "use_import_transmission": false,
+      "fit": {
+        "variant": "B_oil_fx",
+        "obs_cols": [
+          "log_brent_ma10",
+          "log_wti_ma10",
+          "log_dubai_ma10",
+          "log_usd_cny_ma10"
+        ],
+        "llf": -103.29857034927991,
+        "aic": 224.59714069855983,
+        "bic": 254.28199699749214,
+        "converged": true,
+        "iterations": 91
+      },
+      "transmission_models": {
+        "gasoline": {
+          "alpha": 10.0,
+          "features": [
+            "gasoline_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff"
+          ],
+          "coef": {
+            "gasoline_theory_delta": 78.56067068344652,
+            "oil_change_rate": 64.09977661006283,
+            "factor_1": 13.909665821198422,
+            "factor_1_diff": 98.49982746945409
+          }
+        },
+        "diesel": {
+          "alpha": 5.623413251903491,
+          "features": [
+            "diesel_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff"
+          ],
+          "coef": {
+            "diesel_theory_delta": 76.88440512499471,
+            "oil_change_rate": 55.4270504592501,
+            "factor_1": 13.571098968076685,
+            "factor_1_diff": 103.50765416403816
+          }
+        }
+      },
+      "metrics": {
+        "all": {
+          "gasoline_mechanism": {
+            "n": 200,
+            "mae": 81.95435472937645,
+            "rmse": 138.42969018096682,
+            "mean_error": 17.438495988854232,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968268,
+            "wmape": 0.38381620292413743
+          },
+          "diesel_mechanism": {
+            "n": 200,
+            "mae": 85.00406137756909,
+            "rmse": 133.9195219312474,
+            "mean_error": 12.334711711469286,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453976,
+            "wmape": 0.4083298252795441
+          },
+          "gasoline_market_factor": {
+            "n": 200,
+            "mae": 65.97056114881595,
+            "rmse": 89.5062700464317,
+            "mean_error": 5.597228197615691,
+            "direction_accuracy": 0.97,
+            "threshold_accuracy": 0.9,
+            "corr": 0.9410337857570836,
+            "wmape": 0.30895942465198895
+          },
+          "diesel_market_factor": {
+            "n": 200,
+            "mae": 66.5070720926506,
+            "rmse": 94.17645989978423,
+            "mean_error": 5.543196391538931,
+            "direction_accuracy": 0.965,
+            "threshold_accuracy": 0.875,
+            "corr": 0.9310438162745269,
+            "wmape": 0.3194767483734868
+          }
+        },
+        "test_after_train": {
+          "gasoline_mechanism": {
+            "n": 67,
+            "mae": 89.93645753851887,
+            "rmse": 160.59745246772403,
+            "mean_error": 27.69385308486329,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119767,
+            "wmape": 0.40468385863537704
+          },
+          "diesel_mechanism": {
+            "n": 67,
+            "mae": 83.42445105375363,
+            "rmse": 134.62371183302523,
+            "mean_error": 21.072654536283647,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616316,
+            "wmape": 0.39059666111820357
+          },
+          "gasoline_market_factor": {
+            "n": 67,
+            "mae": 71.2152504639849,
+            "rmse": 102.7058124733231,
+            "mean_error": 16.708143873479667,
+            "direction_accuracy": 0.9701492537313433,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9390064301561324,
+            "wmape": 0.3204447133033572
+          },
+          "diesel_market_factor": {
+            "n": 67,
+            "mae": 69.96183370847133,
+            "rmse": 100.87230314814785,
+            "mean_error": 16.546854900116198,
+            "direction_accuracy": 0.9552238805970149,
+            "threshold_accuracy": 0.8059701492537313,
+            "corr": 0.9375098503229319,
+            "wmape": 0.3275641410529405
+          }
+        },
+        "test_2023_2025": {
+          "gasoline_mechanism": {
+            "n": 59,
+            "mae": 70.58725402163425,
+            "rmse": 90.99949350325345,
+            "mean_error": 6.30873549706105,
+            "direction_accuracy": 0.864406779661017,
+            "threshold_accuracy": 0.864406779661017,
+            "corr": 0.9122390581559432,
+            "wmape": 0.36937010973626794
+          },
+          "diesel_mechanism": {
+            "n": 59,
+            "mae": 70.84090977966329,
+            "rmse": 96.2501618637979,
+            "mean_error": 7.482602243957808,
+            "direction_accuracy": 0.8135593220338984,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.8963832047761441,
+            "wmape": 0.38575114693125373
+          },
+          "gasoline_market_factor": {
+            "n": 59,
+            "mae": 61.228410698321206,
+            "rmse": 81.142605278701,
+            "mean_error": 5.426305190615356,
+            "direction_accuracy": 0.9661016949152542,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.9342311763959629,
+            "wmape": 0.3203970049845633
+          },
+          "diesel_market_factor": {
+            "n": 59,
+            "mae": 60.274422516632576,
+            "rmse": 79.65355831439119,
+            "mean_error": 5.263844369442084,
+            "direction_accuracy": 0.9491525423728814,
+            "threshold_accuracy": 0.7796610169491526,
+            "corr": 0.9297245071186419,
+            "wmape": 0.3282132836623278
+          }
+        },
+        "exclude_2026": {
+          "gasoline_mechanism": {
+            "n": 192,
+            "mae": 75.67591811495284,
+            "rmse": 116.21406454997914,
+            "mean_error": 10.43972101776879,
+            "direction_accuracy": 0.8802083333333334,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.8805897960379924,
+            "wmape": 0.3717005954993846
+          },
+          "diesel_mechanism": {
+            "n": 192,
+            "mae": 81.20306110371071,
+            "rmse": 123.30500300221851,
+            "mean_error": 7.7945209414393934,
+            "direction_accuracy": 0.8489583333333334,
+            "threshold_accuracy": 0.8645833333333334,
+            "corr": 0.8639306131158047,
+            "wmape": 0.4085688608991734
+          },
+          "gasoline_market_factor": {
+            "n": 192,
+            "mae": 62.68315979102683,
+            "rmse": 81.7767946105013,
+            "mean_error": 1.667458365866182,
+            "direction_accuracy": 0.96875,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.9430277870006866,
+            "wmape": 0.30788351700888084
+          },
+          "diesel_market_factor": {
+            "n": 192,
+            "mae": 63.386262961165954,
+            "rmse": 87.39392225620237,
+            "mean_error": 1.617535509359812,
+            "direction_accuracy": 0.9635416666666666,
+            "threshold_accuracy": 0.8697916666666666,
+            "corr": 0.9306879318256781,
+            "wmape": 0.3189245935153004
+          }
+        }
+      }
+    },
+    "C_oil_fx_futures": {
+      "title": "C 三原油 + 汇率 + 期货期限结构",
+      "role": "期货检验方案",
+      "description": "在核心市场因子中加入真实 M1/M3/M6 期限价差，检验期货预期信息是否提升效果。",
+      "factor_variables": [
+        "log_brent_ma10",
+        "log_wti_ma10",
+        "log_dubai_ma10",
+        "log_usd_cny_ma10",
+        "brent_m1_m3_spread",
+        "brent_m1_m6_spread",
+        "brent_m3_m6_spread",
+        "dubai_m1_m3_spread",
+        "dubai_m1_m6_spread",
+        "dubai_m3_m6_spread",
+        "wti_m1_m3_spread",
+        "wti_m1_m6_spread",
+        "wti_m3_m6_spread"
+      ],
+      "use_import_transmission": false,
+      "fit": {
+        "variant": "C_oil_fx_futures",
+        "obs_cols": [
+          "log_brent_ma10",
+          "log_wti_ma10",
+          "log_dubai_ma10",
+          "log_usd_cny_ma10",
+          "brent_m1_m3_spread",
+          "brent_m1_m6_spread",
+          "brent_m3_m6_spread",
+          "dubai_m1_m3_spread",
+          "dubai_m1_m6_spread",
+          "dubai_m3_m6_spread",
+          "wti_m1_m3_spread",
+          "wti_m1_m6_spread",
+          "wti_m3_m6_spread"
+        ],
+        "llf": -1699.1608692899786,
+        "aic": 3452.321738579957,
+        "bic": 3541.376307476754,
+        "converged": true,
+        "iterations": 156
+      },
+      "transmission_models": {
+        "gasoline": {
+          "alpha": 10.0,
+          "features": [
+            "gasoline_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff"
+          ],
+          "coef": {
+            "gasoline_theory_delta": 84.18677009587729,
+            "oil_change_rate": 154.11159341093457,
+            "factor_1": 10.448545586907652,
+            "factor_1_diff": -10.44242168798544
+          }
+        },
+        "diesel": {
+          "alpha": 5.623413251903491,
+          "features": [
+            "diesel_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff"
+          ],
+          "coef": {
+            "diesel_theory_delta": 75.33361286845411,
+            "oil_change_rate": 159.54508698908108,
+            "factor_1": 10.46265907438341,
+            "factor_1_diff": -11.777453285603167
+          }
+        }
+      },
+      "metrics": {
+        "all": {
+          "gasoline_mechanism": {
+            "n": 200,
+            "mae": 81.95435472937645,
+            "rmse": 138.42969018096682,
+            "mean_error": 17.438495988854232,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968268,
+            "wmape": 0.38381620292413743
+          },
+          "diesel_mechanism": {
+            "n": 200,
+            "mae": 85.00406137756909,
+            "rmse": 133.9195219312474,
+            "mean_error": 12.334711711469286,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453976,
+            "wmape": 0.4083298252795441
+          },
+          "gasoline_market_factor": {
+            "n": 200,
+            "mae": 72.56631739926085,
+            "rmse": 100.5374939146296,
+            "mean_error": 3.229363794086369,
+            "direction_accuracy": 0.955,
+            "threshold_accuracy": 0.905,
+            "corr": 0.925446559880365,
+            "wmape": 0.3398492794720096
+          },
+          "diesel_market_factor": {
+            "n": 200,
+            "mae": 72.76800401246089,
+            "rmse": 103.86044670663883,
+            "mean_error": 2.9861367296212937,
+            "direction_accuracy": 0.955,
+            "threshold_accuracy": 0.875,
+            "corr": 0.9160991324825313,
+            "wmape": 0.3495520788397305
+          }
+        },
+        "test_after_train": {
+          "gasoline_mechanism": {
+            "n": 67,
+            "mae": 89.93645753851887,
+            "rmse": 160.59745246772403,
+            "mean_error": 27.69385308486329,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119767,
+            "wmape": 0.40468385863537704
+          },
+          "diesel_mechanism": {
+            "n": 67,
+            "mae": 83.42445105375363,
+            "rmse": 134.62371183302523,
+            "mean_error": 21.072654536283647,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616316,
+            "wmape": 0.39059666111820357
+          },
+          "gasoline_market_factor": {
+            "n": 67,
+            "mae": 77.22740437035961,
+            "rmse": 119.72600060704815,
+            "mean_error": 9.639891922645862,
+            "direction_accuracy": 0.9253731343283582,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9211167625715949,
+            "wmape": 0.3474973870257954
+          },
+          "diesel_market_factor": {
+            "n": 67,
+            "mae": 75.43725164242115,
+            "rmse": 117.02626035515331,
+            "mean_error": 8.91384098394415,
+            "direction_accuracy": 0.9253731343283582,
+            "threshold_accuracy": 0.835820895522388,
+            "corr": 0.9192514984529063,
+            "wmape": 0.3532002697443897
+          }
+        },
+        "test_2023_2025": {
+          "gasoline_mechanism": {
+            "n": 59,
+            "mae": 70.58725402163425,
+            "rmse": 90.99949350325345,
+            "mean_error": 6.30873549706105,
+            "direction_accuracy": 0.864406779661017,
+            "threshold_accuracy": 0.864406779661017,
+            "corr": 0.9122390581559432,
+            "wmape": 0.36937010973626794
+          },
+          "diesel_mechanism": {
+            "n": 59,
+            "mae": 70.84090977966329,
+            "rmse": 96.2501618637979,
+            "mean_error": 7.482602243957808,
+            "direction_accuracy": 0.8135593220338984,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.8963832047761441,
+            "wmape": 0.38575114693125373
+          },
+          "gasoline_market_factor": {
+            "n": 59,
+            "mae": 66.27421815874006,
+            "rmse": 89.6984439450723,
+            "mean_error": -3.9113593012834844,
+            "direction_accuracy": 0.9152542372881356,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.9177289043418969,
+            "wmape": 0.3468007868173537
+          },
+          "diesel_market_factor": {
+            "n": 59,
+            "mae": 64.66961608215308,
+            "rmse": 88.36562262917207,
+            "mean_error": -4.193415827357938,
+            "direction_accuracy": 0.9152542372881356,
+            "threshold_accuracy": 0.8135593220338984,
+            "corr": 0.9120254726170983,
+            "wmape": 0.3521465019701921
+          }
+        },
+        "exclude_2026": {
+          "gasoline_mechanism": {
+            "n": 192,
+            "mae": 75.67591811495284,
+            "rmse": 116.21406454997914,
+            "mean_error": 10.43972101776879,
+            "direction_accuracy": 0.8802083333333334,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.8805897960379924,
+            "wmape": 0.3717005954993846
+          },
+          "diesel_mechanism": {
+            "n": 192,
+            "mae": 81.20306110371071,
+            "rmse": 123.30500300221851,
+            "mean_error": 7.7945209414393934,
+            "direction_accuracy": 0.8489583333333334,
+            "threshold_accuracy": 0.8645833333333334,
+            "corr": 0.8639306131158047,
+            "wmape": 0.4085688608991734
+          },
+          "gasoline_market_factor": {
+            "n": 192,
+            "mae": 69.00628259585282,
+            "rmse": 89.43867943025207,
+            "mean_error": -1.2019281186235657,
+            "direction_accuracy": 0.953125,
+            "threshold_accuracy": 0.9010416666666666,
+            "corr": 0.9316978654149527,
+            "wmape": 0.33894106570487953
+          },
+          "diesel_market_factor": {
+            "n": 192,
+            "mae": 69.34798068383851,
+            "rmse": 94.11108890297305,
+            "mean_error": -1.2886017386151956,
+            "direction_accuracy": 0.953125,
+            "threshold_accuracy": 0.8697916666666666,
+            "corr": 0.9192354561511666,
+            "wmape": 0.3489206575287473
+          }
+        }
+      }
+    },
+    "D_oil_fx_import": {
+      "title": "D 三原油 + 汇率 + 海关进口成本",
+      "role": "进口成本对照",
+      "description": "加入海关进口单价和进口量，并允许传导层使用进口成本变化率。",
+      "factor_variables": [
+        "log_brent_ma10",
+        "log_wti_ma10",
+        "log_dubai_ma10",
+        "log_usd_cny_ma10",
+        "log_import_cny_per_ton",
+        "log_import_tons"
+      ],
+      "use_import_transmission": true,
+      "fit": {
+        "variant": "D_oil_fx_import",
+        "obs_cols": [
+          "log_brent_ma10",
+          "log_wti_ma10",
+          "log_dubai_ma10",
+          "log_usd_cny_ma10",
+          "log_import_cny_per_ton",
+          "log_import_tons"
+        ],
+        "llf": -528.3726447445952,
+        "aic": 1082.7452894891903,
+        "bic": 1125.6234152543148,
+        "converged": true,
+        "iterations": 223
+      },
+      "transmission_models": {
+        "gasoline": {
+          "alpha": 10.0,
+          "features": [
+            "gasoline_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff",
+            "import_cny_per_ton_change",
+            "import_usd_per_ton_change"
+          ],
+          "coef": {
+            "gasoline_theory_delta": 77.48815666493111,
+            "oil_change_rate": 63.91077616610332,
+            "factor_1": 13.727498102483828,
+            "factor_1_diff": 99.18173005867334,
+            "import_cny_per_ton_change": 7.037559267874034,
+            "import_usd_per_ton_change": -14.7565119041055
+          }
+        },
+        "diesel": {
+          "alpha": 3.1622776601683795,
+          "features": [
+            "diesel_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff",
+            "import_cny_per_ton_change",
+            "import_usd_per_ton_change"
+          ],
+          "coef": {
+            "diesel_theory_delta": 79.04584248853234,
+            "oil_change_rate": 42.146655253796034,
+            "factor_1": 12.77739848403113,
+            "factor_1_diff": 116.11344763723433,
+            "import_cny_per_ton_change": 29.52598538245275,
+            "import_usd_per_ton_change": -36.0301202067444
+          }
+        }
+      },
+      "metrics": {
+        "all": {
+          "gasoline_mechanism": {
+            "n": 200,
+            "mae": 81.95435472937645,
+            "rmse": 138.42969018096682,
+            "mean_error": 17.438495988854232,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968268,
+            "wmape": 0.38381620292413743
+          },
+          "diesel_mechanism": {
+            "n": 200,
+            "mae": 85.00406137756909,
+            "rmse": 133.9195219312474,
+            "mean_error": 12.334711711469286,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453976,
+            "wmape": 0.4083298252795441
+          },
+          "gasoline_market_factor": {
+            "n": 200,
+            "mae": 65.72825261545925,
+            "rmse": 89.45440574352831,
+            "mean_error": 5.979192402903436,
+            "direction_accuracy": 0.975,
+            "threshold_accuracy": 0.905,
+            "corr": 0.941197857781203,
+            "wmape": 0.3078246229502834
+          },
+          "diesel_market_factor": {
+            "n": 200,
+            "mae": 65.93495944729833,
+            "rmse": 93.64660710771429,
+            "mean_error": 5.707505400213367,
+            "direction_accuracy": 0.975,
+            "threshold_accuracy": 0.885,
+            "corr": 0.9322552480929316,
+            "wmape": 0.3167285190214883
+          }
+        },
+        "test_after_train": {
+          "gasoline_mechanism": {
+            "n": 67,
+            "mae": 89.93645753851887,
+            "rmse": 160.59745246772403,
+            "mean_error": 27.69385308486329,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119767,
+            "wmape": 0.40468385863537704
+          },
+          "diesel_mechanism": {
+            "n": 67,
+            "mae": 83.42445105375363,
+            "rmse": 134.62371183302523,
+            "mean_error": 21.072654536283647,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616316,
+            "wmape": 0.39059666111820357
+          },
+          "gasoline_market_factor": {
+            "n": 67,
+            "mae": 71.0681336364736,
+            "rmse": 103.31959915692337,
+            "mean_error": 17.848335531055014,
+            "direction_accuracy": 0.9850746268656716,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9389182832680391,
+            "wmape": 0.3197827369807744
+          },
+          "diesel_market_factor": {
+            "n": 67,
+            "mae": 69.8746117709066,
+            "rmse": 101.72359142487034,
+            "mean_error": 17.037329552875704,
+            "direction_accuracy": 0.9701492537313433,
+            "threshold_accuracy": 0.835820895522388,
+            "corr": 0.938031657360409,
+            "wmape": 0.32715576440606164
+          }
+        },
+        "test_2023_2025": {
+          "gasoline_mechanism": {
+            "n": 59,
+            "mae": 70.58725402163425,
+            "rmse": 90.99949350325345,
+            "mean_error": 6.30873549706105,
+            "direction_accuracy": 0.864406779661017,
+            "threshold_accuracy": 0.864406779661017,
+            "corr": 0.9122390581559432,
+            "wmape": 0.36937010973626794
+          },
+          "diesel_mechanism": {
+            "n": 59,
+            "mae": 70.84090977966329,
+            "rmse": 96.2501618637979,
+            "mean_error": 7.482602243957808,
+            "direction_accuracy": 0.8135593220338984,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.8963832047761441,
+            "wmape": 0.38575114693125373
+          },
+          "gasoline_market_factor": {
+            "n": 59,
+            "mae": 61.21284601156455,
+            "rmse": 81.3016897975607,
+            "mean_error": 6.731844731831097,
+            "direction_accuracy": 0.9830508474576272,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.9340926290213644,
+            "wmape": 0.32031555784322024
+          },
+          "diesel_market_factor": {
+            "n": 59,
+            "mae": 60.188708941468455,
+            "rmse": 79.44264439529913,
+            "mean_error": 5.666312192238546,
+            "direction_accuracy": 0.9661016949152542,
+            "threshold_accuracy": 0.8135593220338984,
+            "corr": 0.9294998004854407,
+            "wmape": 0.3277465461510511
+          }
+        },
+        "exclude_2026": {
+          "gasoline_mechanism": {
+            "n": 192,
+            "mae": 75.67591811495284,
+            "rmse": 116.21406454997914,
+            "mean_error": 10.43972101776879,
+            "direction_accuracy": 0.8802083333333334,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.8805897960379924,
+            "wmape": 0.3717005954993846
+          },
+          "diesel_mechanism": {
+            "n": 192,
+            "mae": 81.20306110371071,
+            "rmse": 123.30500300221851,
+            "mean_error": 7.7945209414393934,
+            "direction_accuracy": 0.8489583333333334,
+            "threshold_accuracy": 0.8645833333333334,
+            "corr": 0.8639306131158047,
+            "wmape": 0.4085688608991734
+          },
+          "gasoline_market_factor": {
+            "n": 192,
+            "mae": 62.47730981317932,
+            "rmse": 81.49594542801258,
+            "mean_error": 2.0686397873856035,
+            "direction_accuracy": 0.9739583333333334,
+            "threshold_accuracy": 0.9010416666666666,
+            "corr": 0.9434597447670559,
+            "wmape": 0.30687243499949934
+          },
+          "diesel_market_factor": {
+            "n": 192,
+            "mae": 62.79441004351855,
+            "rmse": 86.3917654137614,
+            "mean_error": 1.741210517406641,
+            "direction_accuracy": 0.9739583333333334,
+            "threshold_accuracy": 0.8802083333333334,
+            "corr": 0.9321802577484558,
+            "wmape": 0.3159467172000934
+          }
+        }
+      }
+    },
+    "E_oil_fx_futures_import": {
+      "title": "E 三原油 + 汇率 + 期货期限结构 + 海关进口成本",
+      "role": "完整市场成本方案",
+      "description": "同时纳入期货期限结构和海关进口成本，检验二者是否提供互补信息。",
+      "factor_variables": [
+        "log_brent_ma10",
+        "log_wti_ma10",
+        "log_dubai_ma10",
+        "log_usd_cny_ma10",
+        "log_import_cny_per_ton",
+        "log_import_tons",
+        "brent_m1_m3_spread",
+        "brent_m1_m6_spread",
+        "brent_m3_m6_spread",
+        "dubai_m1_m3_spread",
+        "dubai_m1_m6_spread",
+        "dubai_m3_m6_spread",
+        "wti_m1_m3_spread",
+        "wti_m1_m6_spread",
+        "wti_m3_m6_spread"
+      ],
+      "use_import_transmission": true,
+      "fit": {
+        "variant": "E_oil_fx_futures_import",
+        "obs_cols": [
+          "log_brent_ma10",
+          "log_wti_ma10",
+          "log_dubai_ma10",
+          "log_usd_cny_ma10",
+          "log_import_cny_per_ton",
+          "log_import_tons",
+          "brent_m1_m3_spread",
+          "brent_m1_m6_spread",
+          "brent_m3_m6_spread",
+          "dubai_m1_m3_spread",
+          "dubai_m1_m6_spread",
+          "dubai_m3_m6_spread",
+          "wti_m1_m3_spread",
+          "wti_m1_m6_spread",
+          "wti_m3_m6_spread"
+        ],
+        "llf": -2188.30602868222,
+        "aic": 4438.61205736444,
+        "bic": 4540.85989572743,
+        "converged": true,
+        "iterations": 169
+      },
+      "transmission_models": {
+        "gasoline": {
+          "alpha": 5.623413251903491,
+          "features": [
+            "gasoline_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff",
+            "import_cny_per_ton_change",
+            "import_usd_per_ton_change"
+          ],
+          "coef": {
+            "gasoline_theory_delta": 79.86211323400151,
+            "oil_change_rate": 162.52020517750896,
+            "factor_1": 10.878919618104666,
+            "factor_1_diff": -8.97449063540455,
+            "import_cny_per_ton_change": 20.101840676248177,
+            "import_usd_per_ton_change": -33.164366174703524
+          }
+        },
+        "diesel": {
+          "alpha": 0.5623413251903491,
+          "features": [
+            "diesel_theory_delta",
+            "oil_change_rate",
+            "factor_1",
+            "factor_1_diff",
+            "import_cny_per_ton_change",
+            "import_usd_per_ton_change"
+          ],
+          "coef": {
+            "diesel_theory_delta": 70.43888558513316,
+            "oil_change_rate": 170.1079178088995,
+            "factor_1": 9.407604167634357,
+            "factor_1_diff": -10.327262645213791,
+            "import_cny_per_ton_change": 104.57661348349582,
+            "import_usd_per_ton_change": -117.56527532880735
+          }
+        }
+      },
+      "metrics": {
+        "all": {
+          "gasoline_mechanism": {
+            "n": 200,
+            "mae": 81.95435472937645,
+            "rmse": 138.42969018096682,
+            "mean_error": 17.438495988854232,
+            "direction_accuracy": 0.885,
+            "threshold_accuracy": 0.9,
+            "corr": 0.8682154234968268,
+            "wmape": 0.38381620292413743
+          },
+          "diesel_mechanism": {
+            "n": 200,
+            "mae": 85.00406137756909,
+            "rmse": 133.9195219312474,
+            "mean_error": 12.334711711469286,
+            "direction_accuracy": 0.855,
+            "threshold_accuracy": 0.87,
+            "corr": 0.8550039661453976,
+            "wmape": 0.4083298252795441
+          },
+          "gasoline_market_factor": {
+            "n": 200,
+            "mae": 70.98524890900006,
+            "rmse": 99.17732049607066,
+            "mean_error": 4.14948921424619,
+            "direction_accuracy": 0.945,
+            "threshold_accuracy": 0.92,
+            "corr": 0.928226934129557,
+            "wmape": 0.3324446734995905
+          },
+          "diesel_market_factor": {
+            "n": 200,
+            "mae": 70.74599970995148,
+            "rmse": 102.34006362045282,
+            "mean_error": 3.2343958402608983,
+            "direction_accuracy": 0.955,
+            "threshold_accuracy": 0.89,
+            "corr": 0.9198615188373415,
+            "wmape": 0.33983907630575944
+          }
+        },
+        "test_after_train": {
+          "gasoline_mechanism": {
+            "n": 67,
+            "mae": 89.93645753851887,
+            "rmse": 160.59745246772403,
+            "mean_error": 27.69385308486329,
+            "direction_accuracy": 0.8805970149253731,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9074136182119767,
+            "wmape": 0.40468385863537704
+          },
+          "diesel_mechanism": {
+            "n": 67,
+            "mae": 83.42445105375363,
+            "rmse": 134.62371183302523,
+            "mean_error": 21.072654536283647,
+            "direction_accuracy": 0.835820895522388,
+            "threshold_accuracy": 0.8507462686567164,
+            "corr": 0.9011007167616316,
+            "wmape": 0.39059666111820357
+          },
+          "gasoline_market_factor": {
+            "n": 67,
+            "mae": 77.25016482131679,
+            "rmse": 119.76494836164841,
+            "mean_error": 12.38653496789905,
+            "direction_accuracy": 0.9402985074626866,
+            "threshold_accuracy": 0.8805970149253731,
+            "corr": 0.9224445040561497,
+            "wmape": 0.34759980141223806
+          },
+          "diesel_market_factor": {
+            "n": 67,
+            "mae": 77.19426165487856,
+            "rmse": 118.71443721236585,
+            "mean_error": 9.654912956002661,
+            "direction_accuracy": 0.9402985074626866,
+            "threshold_accuracy": 0.835820895522388,
+            "corr": 0.9188494382554471,
+            "wmape": 0.3614266618362588
+          }
+        },
+        "test_2023_2025": {
+          "gasoline_mechanism": {
+            "n": 59,
+            "mae": 70.58725402163425,
+            "rmse": 90.99949350325345,
+            "mean_error": 6.30873549706105,
+            "direction_accuracy": 0.864406779661017,
+            "threshold_accuracy": 0.864406779661017,
+            "corr": 0.9122390581559432,
+            "wmape": 0.36937010973626794
+          },
+          "diesel_mechanism": {
+            "n": 59,
+            "mae": 70.84090977966329,
+            "rmse": 96.2501618637979,
+            "mean_error": 7.482602243957808,
+            "direction_accuracy": 0.8135593220338984,
+            "threshold_accuracy": 0.8305084745762712,
+            "corr": 0.8963832047761441,
+            "wmape": 0.38575114693125373
+          },
+          "gasoline_market_factor": {
+            "n": 59,
+            "mae": 65.9473881284261,
+            "rmse": 88.56277280149769,
+            "mean_error": -1.2959838963168795,
+            "direction_accuracy": 0.9322033898305084,
+            "threshold_accuracy": 0.864406779661017,
+            "corr": 0.9189204500092419,
+            "wmape": 0.34509054541704126
+          },
+          "diesel_market_factor": {
+            "n": 59,
+            "mae": 66.08051075123026,
+            "rmse": 89.34808882382927,
+            "mean_error": -3.175846816107424,
+            "direction_accuracy": 0.9322033898305084,
+            "threshold_accuracy": 0.8135593220338984,
+            "corr": 0.9083758437691056,
+            "wmape": 0.3598292694344795
+          }
+        },
+        "exclude_2026": {
+          "gasoline_mechanism": {
+            "n": 192,
+            "mae": 75.67591811495284,
+            "rmse": 116.21406454997914,
+            "mean_error": 10.43972101776879,
+            "direction_accuracy": 0.8802083333333334,
+            "threshold_accuracy": 0.8958333333333334,
+            "corr": 0.8805897960379924,
+            "wmape": 0.3717005954993846
+          },
+          "diesel_mechanism": {
+            "n": 192,
+            "mae": 81.20306110371071,
+            "rmse": 123.30500300221851,
+            "mean_error": 7.7945209414393934,
+            "direction_accuracy": 0.8489583333333334,
+            "threshold_accuracy": 0.8645833333333334,
+            "corr": 0.8639306131158047,
+            "wmape": 0.4085688608991734
+          },
+          "gasoline_market_factor": {
+            "n": 192,
+            "mae": 67.25096165806734,
+            "rmse": 87.46912037406933,
+            "mean_error": -0.3982450514723663,
+            "direction_accuracy": 0.9427083333333334,
+            "threshold_accuracy": 0.9166666666666666,
+            "corr": 0.9341867595016595,
+            "wmape": 0.33031938189687715
+          },
+          "diesel_market_factor": {
+            "n": 192,
+            "mae": 67.0621590908126,
+            "rmse": 91.89726551636518,
+            "mean_error": -0.9759112611996712,
+            "direction_accuracy": 0.953125,
+            "threshold_accuracy": 0.8854166666666666,
+            "corr": 0.92267560872085,
+            "wmape": 0.33741966838144705
+          }
+        }
+      }
+    }
+  },
+  "ablation": [
+    {
+      "variant": "A_oil_only",
+      "title": "A 三原油",
+      "role": "基准",
+      "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10",
+      "use_import_transmission": false,
+      "converged": true,
+      "gasoline_test_mae": 71.21870990650666,
+      "diesel_test_mae": 69.97244583000032,
+      "gasoline_2023_2025_mae": 61.23020296831407,
+      "diesel_2023_2025_mae": 60.281069087667404
+    },
+    {
+      "variant": "B_oil_fx",
+      "title": "B 三原油 + 汇率",
+      "role": "核心市场因子",
+      "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10",
+      "use_import_transmission": false,
+      "converged": true,
+      "gasoline_test_mae": 71.2152504639849,
+      "diesel_test_mae": 69.96183370847133,
+      "gasoline_2023_2025_mae": 61.228410698321206,
+      "diesel_2023_2025_mae": 60.274422516632576
+    },
+    {
+      "variant": "C_oil_fx_futures",
+      "title": "C 三原油 + 汇率 + 期货期限结构",
+      "role": "期货检验方案",
+      "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, brent_m1_m3_spread, brent_m1_m6_spread, brent_m3_m6_spread, dubai_m1_m3_spread, dubai_m1_m6_spread, dubai_m3_m6_spread, wti_m1_m3_spread, wti_m1_m6_spread, wti_m3_m6_spread",
+      "use_import_transmission": false,
+      "converged": true,
+      "gasoline_test_mae": 77.22740437035961,
+      "diesel_test_mae": 75.43725164242115,
+      "gasoline_2023_2025_mae": 66.27421815874006,
+      "diesel_2023_2025_mae": 64.66961608215308
+    },
+    {
+      "variant": "D_oil_fx_import",
+      "title": "D 三原油 + 汇率 + 海关进口成本",
+      "role": "进口成本对照",
+      "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons",
+      "use_import_transmission": true,
+      "converged": true,
+      "gasoline_test_mae": 71.0681336364736,
+      "diesel_test_mae": 69.8746117709066,
+      "gasoline_2023_2025_mae": 61.21284601156455,
+      "diesel_2023_2025_mae": 60.188708941468455
+    },
+    {
+      "variant": "E_oil_fx_futures_import",
+      "title": "E 三原油 + 汇率 + 期货期限结构 + 海关进口成本",
+      "role": "完整市场成本方案",
+      "factor_variables": "log_brent_ma10, log_wti_ma10, log_dubai_ma10, log_usd_cny_ma10, log_import_cny_per_ton, log_import_tons, brent_m1_m3_spread, brent_m1_m6_spread, brent_m3_m6_spread, dubai_m1_m3_spread, dubai_m1_m6_spread, dubai_m3_m6_spread, wti_m1_m3_spread, wti_m1_m6_spread, wti_m3_m6_spread",
+      "use_import_transmission": true,
+      "converged": true,
+      "gasoline_test_mae": 77.25016482131679,
+      "diesel_test_mae": 77.19426165487856,
+      "gasoline_2023_2025_mae": 65.9473881284261,
+      "diesel_2023_2025_mae": 66.08051075123026
+    }
+  ]
+}
