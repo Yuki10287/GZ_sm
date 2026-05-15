@@ -1,0 +1,44 @@
+汽油/柴油进出口数据清洗检查报告
+========================================
+原始目录：C:\Users\15591\PycharmProjects\GZ_sm\data\task2\customs_raw
+识别到文件数：22
+输出月度表：C:\Users\15591\PycharmProjects\GZ_sm\data\task2\gasoline_diesel_trade_monthly.csv
+
+单位换算说明：
+- 千克/公斤/kg -> 除以 10,000,000，得到万吨。
+- 吨/公吨/t -> 除以 10,000，得到万吨。
+- 万吨/万公吨 -> 保持不变。
+- 千吨/kt -> 除以 10，得到万吨。
+- 未识别单位时暂按千克处理，并建议人工核对原始文件。
+
+缺失处理说明：
+- 海关表中未出现的月份不再按 0 处理。
+- 输出月度表对进出口数量使用线性插值；序列两端缺失用最近有效值延伸。
+
+缺失年份检查：
+- gasoline_import: 无
+- gasoline_export: 无
+- diesel_import: 无
+- diesel_export: 无
+
+缺失月份检查：
+- gasoline_import: 缺失 0 个月；
+- gasoline_export: 缺失 0 个月；
+- diesel_import: 缺失 0 个月；
+- diesel_export: 缺失 0 个月；
+
+异常值检查：
+- gasoline_import: 均值=1.9307, 最小=0.0000, 最大=17.0873, 负值=0, 高于Q3+3IQR=2
+    month  gasoline_import
+2018-10        16.400844
+2020-05        17.087284
+- gasoline_export: 均值=99.4919, 最小=20.2990, 最大=191.5586, 负值=0, 高于Q3+3IQR=0
+- diesel_import: 均值=5.3525, 最小=0.0000, 最大=27.0572, 负值=0, 高于Q3+3IQR=0
+- diesel_export: 均值=120.8027, 最小=7.3229, 最大=282.7592, 负值=0, 高于Q3+3IQR=0
+
+原始单位分布：
+    fuel   flow quantity_unit  rows
+  diesel export            千克   120
+  diesel import            千克   108
+gasoline export            千克   123
+gasoline import            千克    87
