@@ -1,0 +1,23 @@
+{
+  "scenario": "docx_myopic_with_data",
+  "solver": "single_period_myopic_ratio_search",
+  "weights": {
+    "consumer": 0.129817213258053,
+    "profit": 0.05230606914842305,
+    "cpi": 0.2092242765936922,
+    "expectation": 0.1711834990312027,
+    "security": 0.4374689419686291
+  },
+  "ratio_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "transport_share_mean": 0.13650321741694435,
+  "theta0_cpi": 0.00817845288452138,
+  "theta1_cpi": 0.02552676004506274,
+  "security_penalty_mild": 8.0,
+  "security_penalty_severe": 35.0
+}
