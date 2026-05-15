@@ -1,0 +1,210 @@
+﻿Diagnose log at 2026-05-14T09:16:07Z
+
+AppPath: D:\Git\mingw64\bin\git-credential-manager.exe
+InstallDir: D:\Git\mingw64\bin\
+Version: 2.6.1+786ab03440ddc82e807a97c0e540f5247e44cec6
+
+------------
+Diagnostic: Environment
+Skipped: False
+Success: True
+Exception: None
+Log:
+OSType: Windows
+OSVersion: 10.0 (build 26200)
+Reading environment variables... OK
+ Variables:
+CLION_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\clion.vmoptions
+DriverData=C:\Windows\System32\Drivers\DriverData
+COMPUTERNAME=YUKI10287
+EFC_13760_4126798990=1
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+WEBSTORM_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\webstorm.vmoptions
+ProgramW6432=C:\Program Files
+OneDrive=C:\Users\15591\OneDrive
+CODEX_THREAD_ID=019e25bd-84be-7191-97e8-40df9121e919
+EFC_13760_3789132940=1
+DATASPELL_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\dataspell.vmoptions
+HOMEPATH=\Users\15591
+SESSIONNAME=Console
+DEVECOSTUDIO_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\devecostudio.vmoptions
+EFC_13760_1262719628=1
+WEBIDE_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\webide.vmoptions
+TMP=C:\Users\15591\AppData\Local\Temp
+CODEX_HOME=C:\Users\15591\AppData\Local\JetBrains\PyCharm2026.1\aia\codex
+USERDOMAIN=YUKI10287
+Path=D:/Git/mingw64/libexec/git-core;D:\Git\mingw64\bin;D:\Git\usr\bin;C:\Users\15591\bin;C:\Users\15591\AppData\Local\JetBrains\PyCharm2026.1\aia\codex\tmp\arg0\codex-arg0d5ED6F;D:\VMware\bin\;D:\Python\Scripts\;D:\Python\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;D:\Bandizip\;C:\Program Files\dotnet\;D:\mingw64\bin;D:\Git\cmd;C:\Qt\6.9.0\mingw_64\bin;D:\runtime\win64;D:\bin;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;D:\anaconda3;D:\anaconda3\Library\mingw-w64\bin;D:\anaconda3\Library\usr\bin;D:\anaconda3\Library\bin;D:\anaconda3\Scripts;C:\Users\15591\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\CLion 2024.2.2\bin;D:\Microsoft VS Code\bin;D:\IDEA\IntelliJ IDEA 2025.2.1\bin;D:\PyCharm\PyCharm 2025.2.3\bin;C:\Users\15591\AppData\Local\JetBrains\Toolbox\scripts;
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW;.CPL
+AQUA_VM_OPTIONS=C:\Users\15591\Documents\破解\vmoptions\aqua.vmoptions
+SystemDrive=C:
+GIT_EXEC_PATH=D:/Git/mingw64/libexec/git-core
+DATAGRIP_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\datagrip.vmoptions
+TEMP=C:\Users\15591\AppData\Local\Temp
+LOCALAPPDATA=C:\Users\15591\AppData\Local
+MSYSTEM=MINGW64
+CLion=C:\Program Files\JetBrains\CLion 2024.2.2\bin;
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 117 Stepping 2, AuthenticAMD
+EFC_13760_2775293581=1
+IntelliJ IDEA=D:\IDEA\IntelliJ IDEA 2025.2.1\bin
+ProgramData=C:\ProgramData
+OS=Windows_NT
+JETBRAINS_CLIENT_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\jetbrains_client.vmoptions
+PROCESSOR_REVISION=7502
+EFC_13760_2283032206=1
+PROCESSOR_LEVEL=25
+NUMBER_OF_PROCESSORS=16
+TMPDIR=C:\Users\15591\AppData\Local\Temp
+PHPSTORM_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\phpstorm.vmoptions
+STUDIO_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\studio.vmoptions
+PROMPT=$P$G
+ProgramFiles(x86)=C:\Program Files (x86)
+PUBLIC=C:\Users\Public
+RUSTROVER_VM_OPTIONS=C:\Users\15591\Documents\破解\vmoptions\rustrover.vmoptions
+FPS_BROWSER_USER_PROFILE_STRING=Default
+CommonProgramFiles=C:\Program Files (x86)\Common Files
+USERDOMAIN_ROAMINGPROFILE=YUKI10287
+TERM=xterm-256color
+CODEX_SANDBOX_NETWORK_DISABLED=1
+PLINK_PROTOCOL=ssh
+COLORTERM=truecolor
+ProgramFiles=C:\Program Files (x86)
+RUBYMINE_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\rubymine.vmoptions
+APPCODE_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\appcode.vmoptions
+GIT_TRACE2_PARENT_SID=aa2dd70e-8ec0-4f91-918c-74ec0c6e2304
+GOLAND_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\goland.vmoptions
+HOME=C:\Users\15591
+SystemRoot=C:\Windows
+CommonProgramW6432=C:\Program Files\Common Files
+LOGONSERVER=\\YUKI10287
+CODEX_PATH=C:\Users\15591\AppData\Local\JetBrains\PyCharm2026.1\aia\codex\bin\codex-x86_64-pc-windows-msvc.exe
+USERPROFILE=C:\Users\15591
+RIDER_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\rider.vmoptions
+PyCharm=D:\PyCharm\PyCharm 2025.2.3\bin
+APPDATA=C:\Users\15591\AppData\Roaming
+HOMEDRIVE=C:
+IDEA_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\idea.vmoptions
+GATEWAY_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\gateway.vmoptions
+PSModulePath=C:\Users\15591\Documents\WindowsPowerShell\Modules;C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+JETBRAINSCLIENT_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\jetbrainsclient.vmoptions
+USERNAME=15591
+PROCESSOR_ARCHITEW6432=AMD64
+FPS_BROWSER_APP_PROFILE_STRING=Internet Explorer
+PROCESSOR_ARCHITECTURE=x86
+LC_CTYPE=C.UTF-8
+ComSpec=C:\Windows\system32\cmd.exe
+PYCHARM_VM_OPTIONS=C:\Users\15591\Documents\jetbra\jetbra\vmoptions\pycharm.vmoptions
+EFC_13760_1592913036=1
+windir=C:\Windows
+ALLUSERSPROFILE=C:\ProgramData
+
+
+------------
+Diagnostic: File system
+Skipped: False
+Success: True
+Exception: None
+Log:
+Temporary directory is 'C:\Users\15591\AppData\Local\Temp\'...
+Checking basic file I/O...
+Writing to temporary file 'C:\Users\15591\AppData\Local\Temp\6d09431281d41c283454bbea'... OK
+Reading from temporary file 'C:\Users\15591\AppData\Local\Temp\6d09431281d41c283454bbea'... OK
+Deleting temporary file 'C:\Users\15591\AppData\Local\Temp\6d09431281d41c283454bbea'... OK
+Testing IFileSystem instance...
+UserHomePath: C:\Users\15591
+UserDataDirectoryPath: C:\Users\15591\.gcm
+GetCurrentDirectory(): C:\Users\15591\PycharmProjects\GZ_sm
+
+------------
+Diagnostic: Networking
+Skipped: False
+Success: True
+Exception: None
+Log:
+Checking networking and HTTP stack...
+Creating HTTP client... OK
+IsNetworkAvailable: True
+Sending HEAD request to http://example.com...Sending HEAD request to https://example.com... OK
+ OK
+Acquiring free TCP port... OK
+Testing local HTTP loopback connections...
+Creating new HTTP listener for http://localhost:62702/... OK
+Waiting for loopback connection... OK
+Writing response... OK
+Waiting for response data... OK
+Loopback connection data OK
+
+------------
+Diagnostic: Git
+Skipped: False
+Success: True
+Exception: None
+Log:
+Getting Git version... OK
+Git version is '2.49.0.windows.1'
+Locating current repository...Git repository at 'C:/Users/15591/PycharmProjects/GZ_sm/.git'
+ OK
+Listing all Git configuration... OK
+Git configuration:
+file:D:/Git/etc/gitconfig	diff.astextplain.textconv=astextplain
+file:D:/Git/etc/gitconfig	filter.lfs.clean=git-lfs clean -- %f
+file:D:/Git/etc/gitconfig	filter.lfs.smudge=git-lfs smudge -- %f
+file:D:/Git/etc/gitconfig	filter.lfs.process=git-lfs filter-process
+file:D:/Git/etc/gitconfig	filter.lfs.required=true
+file:D:/Git/etc/gitconfig	http.sslbackend=schannel
+file:D:/Git/etc/gitconfig	core.autocrlf=true
+file:D:/Git/etc/gitconfig	core.fscache=true
+file:D:/Git/etc/gitconfig	core.symlinks=false
+file:D:/Git/etc/gitconfig	pull.rebase=false
+file:D:/Git/etc/gitconfig	credential.helper=manager
+file:D:/Git/etc/gitconfig	credential.https://dev.azure.com.usehttppath=true
+file:D:/Git/etc/gitconfig	init.defaultbranch=main
+file:C:/Users/15591/.gitconfig	core.editor="D:\Microsoft VS Code\bin\code" --wait
+file:C:/Users/15591/.gitconfig	user.name=Yuki10287
+file:C:/Users/15591/.gitconfig	user.email=1559118293@qq.com
+file:.git/config	core.repositoryformatversion=0
+file:.git/config	core.filemode=false
+file:.git/config	core.bare=false
+file:.git/config	core.logallrefupdates=true
+file:.git/config	core.symlinks=false
+file:.git/config	core.ignorecase=true
+file:.git/config	remote.origin.url=https://github.com/Yuki10287/GZ_sm.git
+file:.git/config	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+file:.git/config	branch.exp/real-m136-gemini.remote=origin
+file:.git/config	branch.exp/real-m136-gemini.merge=refs/heads/exp/real-m136-gemini
+
+
+------------
+Diagnostic: Credential storage
+Skipped: False
+Success: True
+Exception: None
+Log:
+ICredentialStore instance is of type: CredentialStore
+Writing test credential... OK
+Reading test credential... OK
+Deleting test credential... OK
+
+------------
+Diagnostic: Microsoft authentication (AAD/MSA)
+Skipped: False
+Success: True
+Exception: None
+Log:
+Broker is not enabled.
+Flow type is: Auto
+Gathering MSAL token cache data... OK
+CacheDirectory: C:\Users\15591\AppData\Local\.IdentityService
+CacheFileName: msal.cache
+CacheFilePath: C:\Users\15591\AppData\Local\.IdentityService\msal.cache
+Creating cache helper... OK
+Verifying MSAL token cache persistence... OK
+
+------------
+Diagnostic: GitHub API
+Skipped: False
+Success: True
+Exception: None
+Log:
+Using 'https://github.com/' as API target.
+Querying '/meta' endpoint... OK
+

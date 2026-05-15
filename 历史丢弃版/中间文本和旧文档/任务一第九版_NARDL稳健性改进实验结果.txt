@@ -1,0 +1,23 @@
+任务一 1.2 NARDL 稳健性改进实验结果
+============================================================
+
+实验设置：
+1. 最大滞后阶数分别设为 4、8、12，并用 BIC 自动选择最优 (p,q)。
+2. 对比卡尔曼综合油价、原始三油种等权现货价、原始现货价3期轻度平滑。
+3. 对比传统0门限与 1%、2%、3% 门限 Threshold NARDL。
+
+汽油：
+  共尝试 36 个设定。
+  短期非对称显著设定数：24。
+  长期非对称显著设定数：9。
+  短期最显著设定：oil_proxy=raw_equal_spot, threshold=2.00%, max_lag=12, (p,q)=(1,1), p_short=0.005958, short_pos=0.561, short_neg=0.673。
+  长期最显著设定：oil_proxy=raw_equal_spot_ma3, threshold=2.00%, max_lag=4, (p,q)=(2,1), p_long=0.0005271, long_pos=0.592, long_neg=0.628。
+
+柴油：
+  共尝试 36 个设定。
+  短期非对称显著设定数：27。
+  长期非对称显著设定数：6。
+  短期最显著设定：oil_proxy=raw_equal_spot, threshold=2.00%, max_lag=12, (p,q)=(1,1), p_short=0.003089, short_pos=0.622, short_neg=0.769。
+  长期最显著设定：oil_proxy=raw_equal_spot_ma3, threshold=2.00%, max_lag=4, (p,q)=(2,1), p_long=0.001404, long_pos=0.645, long_neg=0.682。
+
+完整结果见 CSV，可按 p_short、p_long 或 p_both 排序挑选论文表格。

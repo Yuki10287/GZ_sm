@@ -1,0 +1,9 @@
+﻿oil_proxy,fuel,direction,max_lag,best_lag_by_min_p,min_p_value,significant_5pct
+log_kalman_index,gasoline,oil_to_domestic,4,4,0.420926632048749,False
+log_kalman_index,gasoline,domestic_to_oil,4,1,0.2288897235230281,False
+log_kalman_index,diesel,oil_to_domestic,4,4,0.23237168830572433,False
+log_kalman_index,diesel,domestic_to_oil,4,4,0.29654111715275694,False
+log_raw_equal_spot_ma3,gasoline,oil_to_domestic,4,2,0.5988000777262813,False
+log_raw_equal_spot_ma3,gasoline,domestic_to_oil,4,2,8.895243736273429e-23,True
+log_raw_equal_spot_ma3,diesel,oil_to_domestic,4,2,0.4164068972644793,False
+log_raw_equal_spot_ma3,diesel,domestic_to_oil,4,2,1.3759116014064524e-21,True
