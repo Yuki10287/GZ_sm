@@ -1,0 +1,150 @@
+{
+  "config": {
+    "start_date": "2020-01-01",
+    "window_size": 10,
+    "pricing_lag_days": 1,
+    "threshold_yuan_per_ton": 50.0,
+    "floor_usd_per_bbl": 40.0,
+    "ceiling_usd_per_bbl": 130.0,
+    "ceiling_up_factor": 0.2,
+    "tax_factor": 1.13,
+    "gasoline_bbl_per_ton": 8.6,
+    "diesel_bbl_per_ton": 7.3,
+    "train_end": "2023-12-31"
+  },
+  "data_note": {
+    "futuredata_path": "D:\\Desktop\\26广州数模\\GZ_sm\\期货数据\\futuredata.xlsx",
+    "futures_data_start": "2016-01-29",
+    "futures_data_end": "2026-04-30",
+    "leakage_control": "Monthly futures are forward-filled only after each month-end observation; no linear interpolation is used.",
+    "observation_design": "Spot log levels identify X_t; log term spreads identify delta_t."
+  },
+  "state_space_fit": {
+    "params": {
+      "mu": 0.21461422410855438,
+      "alpha": 0.03549973946003857,
+      "kappa": 0.6019605168294444,
+      "sigma1": 0.39319928077927363,
+      "sigma2": 0.10347863446984683,
+      "rho_fixed": 0.0,
+      "h_log_brent": 0.9549178312947807,
+      "h_log_wti": 0.019751975707272596,
+      "h_log_dubai": 0.08546512283000345,
+      "h_brent_m1_m3_spread": 2.09660786605785,
+      "h_brent_m1_m6_spread": 2.5901925265014967,
+      "h_brent_m3_m6_spread": 0.493705743258475,
+      "h_dubai_m1_m3_spread": 1.2199270728656293,
+      "h_dubai_m1_m6_spread": 2.03416068042393,
+      "h_dubai_m3_m6_spread": 0.813615782563212,
+      "h_wti_m1_m3_spread": 1.680605912483223,
+      "h_wti_m1_m6_spread": 2.5084365064455736,
+      "h_wti_m3_m6_spread": 0.8281519762346384,
+      "obs_sigma_log_brent": 0.023310681342839625,
+      "obs_sigma_log_wti": 0.05535904453095842,
+      "obs_sigma_log_dubai": 0.049017001316236125,
+      "obs_sigma_brent_m1_m3_spread": 0.006164217901252622,
+      "obs_sigma_brent_m1_m6_spread": 0.0020000000000000005,
+      "obs_sigma_brent_m3_m6_spread": 0.006064793747776009,
+      "obs_sigma_dubai_m1_m3_spread": 0.0670036729569124,
+      "obs_sigma_dubai_m1_m6_spread": 0.06986523502233423,
+      "obs_sigma_dubai_m3_m6_spread": 0.008537665157349073,
+      "obs_sigma_wti_m1_m3_spread": 0.025856771299249976,
+      "obs_sigma_wti_m1_m6_spread": 0.02794838249272646,
+      "obs_sigma_wti_m3_m6_spread": 0.0109067033426818
+    },
+    "neg_loglike": -46063.34019120605,
+    "success": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 87,
+    "obs_specs": [
+      {
+        "name": "log_brent",
+        "kind": "level"
+      },
+      {
+        "name": "log_wti",
+        "kind": "level"
+      },
+      {
+        "name": "log_dubai",
+        "kind": "level"
+      },
+      {
+        "name": "brent_m1_m3_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "brent_m1_m6_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "brent_m3_m6_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "dubai_m1_m3_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "dubai_m1_m6_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "dubai_m3_m6_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "wti_m1_m3_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "wti_m1_m6_spread",
+        "kind": "spread"
+      },
+      {
+        "name": "wti_m3_m6_spread",
+        "kind": "spread"
+      }
+    ]
+  },
+  "metrics": {
+    "gasoline": {
+      "n": 122,
+      "mae": 86.34469931084467,
+      "rmse": 171.95297354672485,
+      "mean_error": 30.331485847126842,
+      "direction_accuracy": 0.8934426229508197,
+      "threshold_accuracy": 0.9016393442622951,
+      "corr": 0.8807977529433597
+    },
+    "diesel": {
+      "n": 122,
+      "mae": 76.87203121697192,
+      "rmse": 145.64234260885718,
+      "mean_error": 23.65537675891266,
+      "direction_accuracy": 0.8852459016393442,
+      "threshold_accuracy": 0.8934426229508197,
+      "corr": 0.8796349028915414
+    },
+    "test_after_train": {
+      "gasoline": {
+        "n": 44,
+        "mae": 85.31395427681599,
+        "rmse": 204.87348798938658,
+        "mean_error": 40.34331955407357,
+        "direction_accuracy": 0.9090909090909091,
+        "threshold_accuracy": 0.9090909090909091,
+        "corr": 0.9378722037431703
+      },
+      "diesel": {
+        "n": 44,
+        "mae": 73.46695004498248,
+        "rmse": 155.07125178287427,
+        "mean_error": 31.23751120710474,
+        "direction_accuracy": 0.9090909090909091,
+        "threshold_accuracy": 0.9090909090909091,
+        "corr": 0.9377904797599034
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+﻿label,window_size,pricing_lag_days,maxiter,penalty_weight,neg_loglike,fit_success,gasoline_mae,gasoline_mape,diesel_mae,diesel_mape,test_gas_mae,test_gas_mape,test_die_mae,test_die_mape,elapsed_sec,status
+baseline,10,1,250,0.02,-73706.24037002028,True,,,,,,,,,946.8,OK
+w5_lag1,5,1,250,0.02,-73706.24037002028,True,,,,,,,,,945.2,OK
+w15_lag1,15,1,250,0.02,-73706.24037002028,True,,,,,,,,,942.6,OK
+w10_lag2,10,2,250,0.02,-73706.24037002028,True,,,,,,,,,958.7,OK
+w10_lag0,10,0,250,0.02,-73706.24037002028,True,,,,,,,,,948.6,OK
+w10_lag1_pen05,10,1,250,0.05,-73705.99415449087,True,,,,,,,,,834.4,OK
+w10_lag1_pen01,10,1,250,0.01,-73705.96228716086,True,,,,,,,,,868.5,OK
+w10_lag1_iter500,10,1,500,0.02,-73706.24037002028,True,,,,,,,,,944.1,OK
