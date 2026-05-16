@@ -131,6 +131,7 @@ def summarize_rule(sim: pd.DataFrame, label: str) -> dict[str, float | str]:
     return {
         "scenario": label,
         "fuel": str(sim["fuel"].iloc[0]),
+        "policy": "simplified_rule",
         "rule_total_loss_mean": float(sim["rule_loss"].mean()),
         "rule_delta_abs_mean": float(sim["rule_delta"].abs().mean()),
         "rule_delta_std": float(sim["rule_delta"].std()),
@@ -148,6 +149,97 @@ def summarize_rule(sim: pd.DataFrame, label: str) -> dict[str, float | str]:
         "rule_expectation_loss_mean": float(sim["rule_loss_expectation"].mean()),
         "rule_security_loss_mean": float(sim["rule_loss_security"].mean()),
     }
+
+
+def simulate_mechanism(df: pd.DataFrame, dp: task2.DPResult, fuel: str) -> pd.DataFrame:
+    rows = []
+    price = float(df.loc[0, "domestic_price"])
+    price_prev2 = price
+    action_prev = 0.0
+    cpi_prev = float(df.loc[0, "cpi_yoy"])
+
+    for _, row in df.iterrows():
+        action = float(row["current_mechanism_delta"])
+        loss, parts, cpi_next = task2.normalized_single_period_loss(
+            price_prev=price,
+            action=action,
+            action_prev=action_prev,
+            price_prev2=price_prev2,
+            oil_price=float(row["oil_price_usd_bbl"]),
+            inventory_cost=float(row["inventory_cost"]),
+            cpi_prev=cpi_prev,
+            quantity=float(row["quantity_tonnes"]),
+            calib=dp.calibration,
+        )
+        price_before = price
+        price = max(price + action, 1.0)
+        price_prev2 = price_before
+        action_prev = action
+        cpi_prev = cpi_next
+        rows.append(
+            {
+                "adjust_date": row["adjust_date"],
+                "fuel": fuel,
+                "policy": "full_mechanism",
+                "policy_delta": action,
+                "policy_price": price,
+                "inventory_cost": row["inventory_cost"],
+                "policy_loss": loss,
+                **{f"policy_loss_{k}": v for k, v in parts.items()},
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def summarize_policy(sim: pd.DataFrame, scenario: str, policy: str) -> dict[str, float | str]:
+    return {
+        "scenario": scenario,
+        "fuel": str(sim["fuel"].iloc[0]),
+        "policy": policy,
+        "total_loss_mean": float(sim["policy_loss"].mean()),
+        "delta_abs_mean": float(sim["policy_delta"].abs().mean()),
+        "delta_std": float(sim["policy_delta"].std()),
+        "large_adjustment_count_abs_ge_500": float((sim["policy_delta"].abs() >= 500).sum()),
+        "price_below_inventory_cost_count": float((sim["policy_price"] < sim["inventory_cost"]).sum()),
+        "price_below_cost_plus_margin_count": float((sim["policy_price"] < sim["inventory_cost"] * 1.06).sum()),
+        "consumer_loss_mean": float(sim["policy_loss_consumer"].mean()),
+        "profit_loss_mean": float(sim["policy_loss_profit"].mean()),
+        "cpi_loss_mean": float(sim["policy_loss_cpi"].mean()),
+        "expectation_loss_mean": float(sim["policy_loss_expectation"].mean()),
+        "security_loss_mean": float(sim["policy_loss_security"].mean()),
+    }
+
+
+def convert_rule_to_policy_frame(sim: pd.DataFrame) -> pd.DataFrame:
+    cols = {
+        "rule_delta": "policy_delta",
+        "rule_price": "policy_price",
+        "rule_loss": "policy_loss",
+        "rule_loss_consumer": "policy_loss_consumer",
+        "rule_loss_profit": "policy_loss_profit",
+        "rule_loss_cpi": "policy_loss_cpi",
+        "rule_loss_expectation": "policy_loss_expectation",
+        "rule_loss_security": "policy_loss_security",
+    }
+    out = sim.rename(columns=cols).copy()
+    out["policy"] = "simplified_rule"
+    return out
+
+
+def convert_rolling_to_policy_frame(sim: pd.DataFrame) -> pd.DataFrame:
+    cols = {
+        "optimal_delta": "policy_delta",
+        "optimal_price": "policy_price",
+        "optimal_loss": "policy_loss",
+        "optimal_loss_consumer": "policy_loss_consumer",
+        "optimal_loss_profit": "policy_loss_profit",
+        "optimal_loss_cpi": "policy_loss_cpi",
+        "optimal_loss_expectation": "policy_loss_expectation",
+        "optimal_loss_security": "policy_loss_security",
+    }
+    out = sim.rename(columns=cols).copy()
+    out["policy"] = "rolling_optimal_H3"
+    return out
 
 
 def load_baseline_strategy() -> pd.DataFrame:
@@ -244,10 +336,11 @@ def perturb_data(df: pd.DataFrame, scenario: str, rng: np.random.Generator) -> p
     return out
 
 
-def run_robustness(params: RuleParams) -> tuple[pd.DataFrame, pd.DataFrame]:
+def run_robustness(params: RuleParams) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     scenarios = ["baseline", "oil_up_20pct", "oil_down_20pct", "high_volatility", "conflict_spike"]
     rng = np.random.default_rng(20260516)
     rows = []
+    comparison_rows = []
     sims = []
     for fuel in ["gasoline", "diesel"]:
         base_df = task2.make_model_data(fuel)  # type: ignore[arg-type]
@@ -258,11 +351,44 @@ def run_robustness(params: RuleParams) -> tuple[pd.DataFrame, pd.DataFrame]:
             sim["robustness_scenario"] = scenario
             sims.append(sim)
             rows.append(summarize_rule(sim, scenario))
-    return pd.DataFrame(rows), pd.concat(sims, ignore_index=True)
+
+            rule_policy = convert_rule_to_policy_frame(sim)
+            mechanism_policy = simulate_mechanism(df, dp, fuel)
+            rolling_policy = convert_rolling_to_policy_frame(task2.simulate_strategy(df, dp, fuel, scenario=scenario))
+            comparison_rows.append(summarize_policy(rule_policy, scenario, "simplified_rule"))
+            comparison_rows.append(summarize_policy(mechanism_policy, scenario, "full_mechanism"))
+            comparison_rows.append(summarize_policy(rolling_policy, scenario, "rolling_optimal_H3"))
+    return pd.DataFrame(rows), pd.concat(sims, ignore_index=True), pd.DataFrame(comparison_rows)
 
 
-def write_report(params: RuleParams, search: pd.DataFrame, robustness: pd.DataFrame) -> None:
+def write_report(params: RuleParams, search: pd.DataFrame, robustness: pd.DataFrame, comparison: pd.DataFrame) -> None:
     baseline = robustness[robustness["scenario"].eq("baseline")]
+    best_rule = search.iloc[0]
+    fidelity = pd.DataFrame(
+        [
+            {
+                "metric": "执行比例与滚动最优匹配率",
+                "value": float(best_rule["ratio_match_to_rolling_optimal"]),
+            },
+            {
+                "metric": "调价方向与滚动最优匹配率",
+                "value": float(best_rule["direction_match_to_rolling_optimal"]),
+            },
+            {
+                "metric": "规则样本内平均损失",
+                "value": float(best_rule["rule_loss_mean"]),
+            },
+            {
+                "metric": "规则平均绝对调幅",
+                "value": float(best_rule["delta_abs_mean"]),
+            },
+            {
+                "metric": "平均结转绝对值",
+                "value": float(best_rule["carry_over_abs_mean"]),
+            },
+        ]
+    )
+
     def md_table(df: pd.DataFrame) -> str:
         shown = df.copy()
         for col in shown.columns:
@@ -315,11 +441,19 @@ def write_report(params: RuleParams, search: pd.DataFrame, robustness: pd.DataFr
         "",
         "执行后若实际调幅低于50元/吨，则本期不调价，并将未执行部分结转至下一期。",
         "",
+        "规则与滚动最优策略的样本内拟合情况如下：",
+        "",
+        md_table(fidelity),
+        "",
         "## 三、历史回放结果",
         "",
         md_table(baseline),
         "",
         "历史回放表明，简化规则在保持透明可解释的同时，仍能给出较平滑的调价路径。它不完全复制任务二滚动优化策略，而是将其压缩为公众容易理解的阈值规则。",
+        "",
+        "为避免只评价规则自身，本文进一步将简化规则、完全机制执行和任务二滚动最优策略放在相同扰动情景下比较：",
+        "",
+        md_table(comparison),
         "",
         "## 四、鲁棒性检验",
         "",
@@ -340,13 +474,14 @@ def write_report(params: RuleParams, search: pd.DataFrame, robustness: pd.DataFr
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     params, search = optimize_rule_params()
-    robustness, window_results = run_robustness(params)
+    robustness, window_results, comparison = run_robustness(params)
     params_df = pd.DataFrame([params.__dict__])
     params_df.to_csv(OUT_DIR / "task3_simplified_rule_params.csv", index=False, encoding="utf-8-sig")
     search.to_csv(OUT_DIR / "task3_rule_grid_search.csv", index=False, encoding="utf-8-sig")
     robustness.to_csv(OUT_DIR / "task3_robustness_scenarios.csv", index=False, encoding="utf-8-sig")
+    comparison.to_csv(OUT_DIR / "task3_robustness_policy_comparison.csv", index=False, encoding="utf-8-sig")
     window_results.to_csv(OUT_DIR / "task3_rule_window_results.csv", index=False, encoding="utf-8-sig")
-    write_report(params, search, robustness)
+    write_report(params, search, robustness, comparison)
     print(params_df.to_string(index=False))
     print(robustness.to_string(index=False))
     print(f"\n已输出目录: {OUT_DIR}")
