@@ -1,0 +1,30 @@
+{
+  "weights": {
+    "consumer": 0.129817213258053,
+    "profit": 0.05230606914842305,
+    "cpi": 0.2092242765936922,
+    "expectation": 0.1711834990312027,
+    "security": 0.4374689419686291
+  },
+  "action_grid": [
+    -400,
+    -200,
+    -100,
+    0,
+    100,
+    200,
+    400
+  ],
+  "beta": 0.98,
+  "tau_security": 2.0,
+  "target_margin": 0.06,
+  "transport_share_mean": 0.13650321741694435,
+  "grid_shape": [
+    4,
+    5,
+    4,
+    4,
+    7
+  ],
+  "state_note": "oil, price, inventory_cost, cpi, previous_action"
+}

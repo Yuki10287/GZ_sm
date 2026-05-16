@@ -1,0 +1,19 @@
+任务二严格docx版MDP对照结果
+==================================================
+
+已严格落实的部分：
+- 五维社会福利损失：消费者、利润、CPI、预期平滑、能源安全。
+- 状态变量：国际油价、国内价格、库存成本、CPI，并额外加入上一期动作以保证二阶差分损失满足马尔可夫性。
+- 转移方程：国际油价AR(1)、国内价格P'=P+a、库存成本动态更新、CPI传导方程。
+- 求解方法：离散状态空间上的贝尔曼方程近似值迭代。
+
+无法完全按原文无损落实的部分及原因：
+- docx列出的4维状态不足以计算预期平滑损失中的价格二阶差分，因此代码加入上一期动作作为辅助状态。
+- 库存成本原文需要3期原油采购成本和库存周转权重；公开数据没有炼厂存货周转天数，且若严格加入3期滞后成本会显著扩展状态维度，因此用当前库存成本与下一期原油采购成本的加权更新近似。
+- 原文贝尔曼方程是连续高维状态和随机期望；代码采用离散网格、三点油价冲击近似期望。
+- WACC、炼油单位加工成本、实际供需缺口没有直接公开月度数据，仍用前面已整理数据和校准参数近似。
+
+summary：
+ n_windows  actual_total_loss_mean  mechanism_total_loss_mean  optimal_total_loss_mean  loss_reduction_vs_actual_pct  loss_reduction_vs_mechanism_pct  actual_delta_abs_mean  mechanism_delta_abs_mean  optimal_delta_abs_mean  actual_delta_std  mechanism_delta_std  optimal_delta_std  large_adjustment_count_abs_ge_500  price_below_inventory_cost_count  price_below_cost_plus_margin_count  carry_over_abs_mean  direction_match_vs_mechanism_rate  direction_match_vs_actual_rate  intervention_ratio_mean  actual_consumer_loss_mean  mechanism_consumer_loss_mean  optimal_consumer_loss_mean  actual_profit_loss_mean  mechanism_profit_loss_mean  optimal_profit_loss_mean  actual_cpi_loss_mean  mechanism_cpi_loss_mean  optimal_cpi_loss_mean  actual_expectation_loss_mean  mechanism_expectation_loss_mean  optimal_expectation_loss_mean  actual_security_loss_mean  mechanism_security_loss_mean  optimal_security_loss_mean                        scenario     fuel
+     200.0                0.079306                   0.069242                 0.013252                     83.289552                        80.860613                213.525                199.898620                   156.5        263.893317           262.543331         167.631296                                0.0                               2.0                                14.0                  0.0                               0.43                           0.440                 0.089158                   0.000721                      0.000718                    0.045613                 0.002165                    0.002006                  0.091829              0.000041                 0.000040               0.000040                      0.426557                         0.385506                         0.0120                   0.013878                      0.006955                    0.001063 docx_strict_mdp_value_iteration gasoline
+     200.0                0.078423                   0.064563                 0.025224                     67.836528                        60.932136                208.175                190.276507                   235.5        256.894136           251.377301         231.207775                                0.0                               2.0                                29.0                  0.0                               0.48                           0.485                 2.322581                   0.000842                      0.000828                    0.100192                 0.002530                    0.002297                  0.163962              0.000035                 0.000034               0.000034                      0.411700                         0.353482                         0.0188                   0.017596                      0.008728                    0.000949 docx_strict_mdp_value_iteration   diesel
