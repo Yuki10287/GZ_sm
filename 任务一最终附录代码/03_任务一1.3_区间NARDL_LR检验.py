@@ -1,7 +1,7 @@
 """任务一 1.3：区间 NARDL 的 LR 似然比检验。
 
 严格对应队友新版《任务一 5.14(2).docx》的 1.3：
-    1. 按 40/130 美元制度边界定义低油价、正常油价、高油价三个虚拟变量；
+    1. 按 40 美元地板价和 110 美元经验高油价阈值定义低油价、正常油价、高油价三个虚拟变量；
     2. 将区间虚拟变量与 NARDL 长期正负累计项相乘；
     3. 对每个区间检验“涨价传导系数 = 降价传导系数”；
     4. 检验方法使用 LR 似然比检验，与 1.2 保持一致。
@@ -45,7 +45,8 @@ SCENARIOS = [
 ]
 
 ZONE_ORDER = ["low", "normal", "high"]
-ZONE_NAME = {"low": "低油价区间(<40)", "normal": "正常油价区间(40-130)", "high": "高油价区间(>=130)"}
+HIGH_PRICE_THRESHOLD = 110.0
+ZONE_NAME = {"low": "低油价区间(<40)", "normal": "正常油价区间(40-110)", "high": "高油价区间(>=110)"}
 
 
 def load_data() -> pd.DataFrame:
@@ -83,8 +84,8 @@ def add_terms(df: pd.DataFrame, oil_proxy: str, threshold: float) -> pd.DataFram
     d["x_neg"] = d["dx_neg"].fillna(0.0).cumsum()
 
     d["D_low"] = (d["x_level"] < 40).astype(int)
-    d["D_normal"] = ((d["x_level"] >= 40) & (d["x_level"] < 130)).astype(int)
-    d["D_high"] = (d["x_level"] >= 130).astype(int)
+    d["D_normal"] = ((d["x_level"] >= 40) & (d["x_level"] < HIGH_PRICE_THRESHOLD)).astype(int)
+    d["D_high"] = (d["x_level"] >= HIGH_PRICE_THRESHOLD).astype(int)
 
     for zone in ZONE_ORDER:
         d[f"{zone}_pos_base"] = d[f"D_{zone}"] * d["x_pos"]
@@ -241,7 +242,8 @@ def write_report(results: pd.DataFrame) -> None:
                         f"LR={row['lr_stat']:.4f}，p={row['p_value']:.4g}，结论：{row['decision_5pct']}。"
                     )
             lines.append("")
-    lines.append("说明：样本期没有 130 美元/桶以上窗口，因此高油价天花板区间不能直接实证检验。")
+    lines.append("说明：高油价区间采用 110 美元/桶经验阈值，用于在样本内识别高油价压力阶段；")
+    lines.append("130 美元/桶天花板价在样本期内没有实际触发，因此本文不直接检验天花板约束本身。")
     OUT_TXT.write_text("\n".join(lines), encoding="utf-8")
 
 
