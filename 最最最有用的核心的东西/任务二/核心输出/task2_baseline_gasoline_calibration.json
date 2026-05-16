@@ -1,0 +1,33 @@
+{
+  "scenario": "baseline",
+  "c0": 0.14271094262079137,
+  "rho_c": 0.9673477451039948,
+  "sigma_c": 0.06560762232890782,
+  "alpha0": 0.0004884851992350986,
+  "alpha1": 0.9519284976146127,
+  "theta0_cpi": 0.008267744521802541,
+  "theta1_cpi": 0.02561439966921443,
+  "epsilon_demand": -0.6,
+  "target_margin": 0.06,
+  "beta": 0.98,
+  "tau_security": 2.0,
+  "weights": {
+    "consumer": 0.129817213258053,
+    "profit": 0.05230606914842305,
+    "cpi": 0.2092242765936922,
+    "expectation": 0.1711834990312027,
+    "security": 0.4374689419686291
+  },
+  "ratio_grid": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "transport_share_mean": 0.13650321741694435,
+  "security_floor_ratio": 0.97,
+  "security_penalty_mild": 8.0,
+  "security_penalty_severe": 35.0,
+  "horizon": 3
+}
